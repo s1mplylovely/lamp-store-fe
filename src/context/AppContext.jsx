@@ -87,6 +87,16 @@ export function AppProvider({ children }) {
     setOrders((prev) => [order, ...prev]);
   };
 
+  const updateOrder = (orderId, data) => {
+    setOrders((prev) =>
+      prev.map((o) => (o.id === orderId ? { ...o, ...data } : o))
+    );
+  };
+
+  const deleteOrder = (orderId) => {
+    setOrders((prev) => prev.filter((o) => o.id !== orderId));
+  };
+
   // Product
   const addProduct = (product) => {
     setProducts((prev) => [...prev, { ...product, id: Date.now() }]);
@@ -126,6 +136,9 @@ export function AppProvider({ children }) {
         orders,
         myOrders,
         addOrder,
+        addOrder,
+        updateOrder,
+        deleteOrder,
         authModalOpen,
         authModalMessage,
         openAuthModal,

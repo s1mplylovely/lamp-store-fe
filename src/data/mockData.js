@@ -566,3 +566,17 @@ export const CHART_DATA = [
   { day: formatDate(subDays(new Date(), 1)), orders: 6 },
   { day: formatDate(new Date()), orders: 2 },
 ];
+
+export const STATUS_COLORS = {
+  new: 'warning',
+  delivering: 'info',
+  delivered: 'success',
+  cancelled: 'error',
+};
+
+export const ORDER_STATUSES = {
+  new: 'новый',
+  delivering: 'в доставке',
+  delivered: 'доставлен',
+  cancelled: 'отменён',
+};

@@ -9,7 +9,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import PeopleIcon from '@mui/icons-material/People';
 import ListAltIcon from '@mui/icons-material/ListAlt';
-import { useApp } from '../../context/AppContext';
+import { useApp } from '../../../context/AppContext';
 import styles from './Header.module.css';
 
 export default function Header() {

@@ -7,21 +7,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { useApp } from '../../../context/AppContext';
 import { useNavigate } from 'react-router-dom';
+import { ORDER_STATUSES, STATUS_COLORS } from '../../../data/mockData';
 import styles from './OrderCard.module.css';
-
-const STATUS_COLORS = {
-    new: 'warning',
-    delivering: 'info',
-    delivered: 'success',
-    cancelled: 'error',
-};
-
-const ORDER_STATUSES = {
-    new: 'новый',
-    delivering: 'в доставке',
-    delivered: 'доставлен',
-    cancelled: 'отменён',
-};
 
 export function OrderCard({ order }) {
     const { addToCart } = useApp();

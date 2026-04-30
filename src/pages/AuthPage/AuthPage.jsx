@@ -6,9 +6,9 @@ import {
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
-import { EmailForm } from '../../components/forms/EmailForm'
-import { PhoneForm } from '../../components/forms/PhoneForm'
-import { CodeVerificationForm } from '../../components/forms/CodeVerificationForm'
+import { EmailForm } from '../../components/authforms/EmailForm'
+import { PhoneForm } from '../../components/authforms/PhoneForm'
+import { CodeVerificationForm } from '../../components/authforms/CodeVerificationForm'
 import styles from './AuthPage.module.css';
 
 export default function AuthPage() {
@@ -32,7 +32,7 @@ export default function AuthPage() {
   const handleVerified = (value) => {
     const success = login(value);
     if (success) {
-    navigate('/catalog');
+      navigate('/catalog');
     }
   };
 
