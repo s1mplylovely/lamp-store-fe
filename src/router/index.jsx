@@ -4,6 +4,8 @@ import CatalogPage from '../pages/CatalogPage/CatalogPage';
 import AuthPage from '../pages/AuthPage/AuthPage';
 import ProductPage from '../pages/ProductPage/ProductPage';
 import ProductEditPage from '../pages/ProductEditPage/ProductEditPage';
+import CartPage from '../pages/CartPage/CartPage';
+import CheckoutPage from '../pages/CheckoutPage/CheckoutPage';
 
 export const router = createBrowserRouter([
   {
@@ -14,6 +16,8 @@ export const router = createBrowserRouter([
       { path: 'catalog', element: <CatalogPage /> },
       { path: 'catalog/:id', element: <ProductPage /> },
       { path: 'catalog/:id/edit', element: <ProductEditPage /> },
+      { path: 'cart', element: <CartPage /> },
+      { path: 'checkout', element: <CheckoutPage /> },
     ],
   },
   { path: '/auth', element: <AuthPage /> },

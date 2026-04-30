@@ -1,0 +1,85 @@
+.root {
+  padding-top: 24px !important;
+  padding-bottom: 40px !important;
+}
+
+.heading {
+  font-weight: 700 !important;
+  color: var(--dark);
+  margin-bottom: 24px !important;
+}
+
+.layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.itemList {
+  flex: 1;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.itemInfo {
+  flex: 1;
+}
+
+.itemName {
+  font-weight: 600 !important;
+}
+
+.itemControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.itemTotal {
+  font-weight: 700 !important;
+  min-width: 80px;
+  text-align: right;
+}
+
+.summary {
+  width: 280px;
+  flex-shrink: 0;
+  padding: 20px !important;
+  position: sticky;
+  top: 80px;
+}
+
+.summaryTitle {
+  font-weight: 700 !important;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.totalAmount {
+  font-weight: 700 !important;
+  color: var(--dark);
+}
+
+.checkoutBtn {
+  background: var(--dark) !important;
+  margin-top: 16px !important;
+}

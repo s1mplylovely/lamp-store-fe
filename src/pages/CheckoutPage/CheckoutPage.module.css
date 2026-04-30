@@ -1,0 +1,69 @@
+.root {
+  padding-top: 24px !important;
+  padding-bottom: 40px !important;
+}
+
+.backBtn {
+  margin-bottom: 16px !important;
+  color: var(--bottom-text) !important;
+}
+
+.heading {
+  font-weight: 700 !important;
+  color: var(--dark);
+  margin-bottom: 24px !important;
+}
+
+.paper {
+  padding: 24px !important;
+}
+
+.summary {
+  padding: 24px !important;
+  position: sticky;
+  top: 80px;
+}
+
+.sectionTitle {
+  font-weight: 700 !important;
+  color: var(--dark);
+  margin-bottom: 16px !important;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.itemName {
+  font-weight: 600 !important;
+}
+
+.itemPrice {
+  font-weight: 600 !important;
+  white-space: nowrap;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.totalAmount {
+  font-weight: 700 !important;
+  color: var(--dark);
+}
+
+.payBtn {
+  background: var(--dark) !important;
+}
