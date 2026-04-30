@@ -13,6 +13,7 @@ import { ORDER_STATUSES, STATUS_COLORS } from '../../data/mockData';
 import { useNavigate } from 'react-router-dom';
 import { OrderDetailRow } from '../../components/admin/OrderDetailRow/OrderDetailRow';
 import OrdersFilterSidebar from '../../components/admin/OrdersFilterSidebar/OrdersFilterSidebar';
+import DeleteDialog from '../../components/ui/DeleteDialog';
 import styles from './OrdersManagementPage.module.css';
 
 export default function OrdersManagementPage() {
@@ -24,6 +25,7 @@ export default function OrdersManagementPage() {
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
   const [expanded, setExpanded] = useState(null);
+  const [deleteOrderId, setDeleteOrderId] = useState(null);
 
   if (!currentUser?.isAdmin) {
     navigate('/catalog');
@@ -43,6 +45,11 @@ export default function OrdersManagementPage() {
       return true;
     });
   }, [orders, search, filterStatus, filterPayment, dateFrom, dateTo]);
+
+  const handleConfirmDelete = () => {
+    deleteOrder(deleteOrderId);
+    setDeleteOrderId(null);
+  };
 
   return (
     <Container maxWidth="xl" className={styles.root}>
@@ -101,7 +108,7 @@ export default function OrdersManagementPage() {
                           </IconButton>
                         </Tooltip>
                         <Tooltip title="Удалить">
-                          <IconButton size="small" color="error" onClick={() => deleteOrder(order.id)}>
+                          <IconButton size="small" color="error" onClick={() => setDeleteOrderId(order.id)}>
                             <DeleteIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
@@ -133,6 +140,12 @@ export default function OrdersManagementPage() {
           </Paper>
         </Box>
       </Box>
+      <DeleteDialog
+        open={deleteOrderId !== null}
+        onClose={() => setDeleteOrderId(null)}
+        onConfirm={handleConfirmDelete}
+        entity="заказ"
+      />
     </Container>
   );
 }

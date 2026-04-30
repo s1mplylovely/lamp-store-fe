@@ -12,6 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined';
 import FilterSidebar from '../../components/catalog/FilterSidebar/FilterSidebar';
 import { useApp } from '../../context/AppContext';
+import DeleteDialog from '../../components/ui/DeleteDialog';
 import styles from './ProductPage.module.css';
 
 export default function ProductPage() {
@@ -173,18 +174,12 @@ export default function ProductPage() {
       </Box>
 
       {/* Подтверждение удаления */}
-      <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)} maxWidth="xs">
-        <DialogTitle>Удалить товар?</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Вы собираетесь удалить товар «{product.name}». Это действие нельзя отменить.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteOpen(false)}>Отмена</Button>
-          <Button color="error" variant="contained" onClick={handleDelete}>Подтвердить</Button>
-        </DialogActions>
-      </Dialog>
+      <DeleteDialog
+        open={deleteOpen}
+        onClose={() => setDeleteOpen(false)}
+        onConfirm={handleDelete}
+        entity='товар'
+      />
     </Container>
   );
 }

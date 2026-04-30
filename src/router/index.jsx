@@ -9,6 +9,7 @@ import CheckoutPage from '../pages/CheckoutPage/CheckoutPage';
 import OrderConfirmationPage from '../pages/OrderConfirmationPage/OrderConfirmationPage';
 import DashboardPage from '../pages/DashboardPage/DashboardPage';
 import OrdersManagementPage from '../pages/OrdersManagementPage/OrdersManagementPage';
+import OrderEditPage from '../pages/OrderEditPage/OrderEditPage';
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ export const router = createBrowserRouter([
       { path: 'checkout/confirm', element: <OrderConfirmationPage /> },
       { path: 'dashboard', element: <DashboardPage /> },
       { path: 'admin/orders', element: <OrdersManagementPage /> },
+      { path: 'admin/orders/:id/edit', element: <OrderEditPage /> },
     ],
   },
   { path: '/auth', element: <AuthPage /> },
