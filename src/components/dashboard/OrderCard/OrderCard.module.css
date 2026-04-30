@@ -1,0 +1,22 @@
+.orderCard {
+    margin-bottom: 8px !important;
+}
+
+.orderHeader {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.orderId {
+    font-weight: 700 !important;
+    color: var(--dark);
+    min-width: 80px;
+}
+
+.orderTotal {
+    font-weight: 700 !important;
+    margin-left: auto;
+}

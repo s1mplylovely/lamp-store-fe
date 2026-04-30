@@ -7,6 +7,7 @@ import ProductEditPage from '../pages/ProductEditPage/ProductEditPage';
 import CartPage from '../pages/CartPage/CartPage';
 import CheckoutPage from '../pages/CheckoutPage/CheckoutPage';
 import OrderConfirmationPage from '../pages/OrderConfirmationPage/OrderConfirmationPage';
+import DashboardPage from '../pages/DashboardPage/DashboardPage';
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ export const router = createBrowserRouter([
       { path: 'cart', element: <CartPage /> },
       { path: 'checkout', element: <CheckoutPage /> },
       { path: 'checkout/confirm', element: <OrderConfirmationPage /> },
+      { path: 'dashboard', element: <DashboardPage /> },
     ],
   },
   { path: '/auth', element: <AuthPage /> },

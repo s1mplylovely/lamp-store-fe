@@ -1,0 +1,17 @@
+.root {
+  padding-top: 24px !important;
+  padding-bottom: 40px !important;
+}
+
+.heading {
+  font-weight: 700 !important;
+  color: var(--dark);
+}
+
+.tabs {
+  border-bottom: 1px solid var(--bottom-text);
+}
+
+.tabContent {
+  padding: 24px;
+}

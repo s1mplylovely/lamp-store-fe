@@ -1,0 +1,53 @@
+.stats {
+    width: 100%;
+}
+
+.statCard {
+    padding: 20px !important;
+    text-align: center;
+}
+
+.statNum {
+    font-weight: 700 !important;
+    color: var(--dark);
+}
+
+.box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.chartPaper {
+    flex: 3;
+    padding: 20px !important;
+}
+
+.topPaper {
+    padding: 20px !important;
+    flex: 2;
+}
+
+.chartTitle {
+    font-weight: 700 !important;
+    color: var(--dark);
+    margin-bottom: 16px !important;
+}
+
+.topRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--bg);
+}
+
+.rankChip {
+    background: var(--dark) !important;
+    color: var(--light) !important;
+    font-weight: 700;
+}
+
+.topName {
+    flex: 1;
+}

@@ -6,6 +6,18 @@
   height: fit-content;
   position: sticky;
   top: 80px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.root::-webkit-scrollbar {
+  width: 6px;
+}
+
+.root::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
 }
 
 .heading {

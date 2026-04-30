@@ -12,6 +12,7 @@ export function AppProvider({ children }) {
   const [products, setProducts] = useState(PRODUCTS);
   const [orders, setOrders] = useState(ORDERS);
 
+  // Auth
   const login = (login) => {
     const user = USERS.find((u) => u.email === login || u.phone === login);
     if (user) {
@@ -34,6 +35,7 @@ export function AppProvider({ children }) {
     setCart([]);
   };
 
+  // AuthModal
   const openAuthModal = (message = 'Авторизуйтесь, чтобы начать покупки') => {
     setAuthModalMessage(message);
     setAuthModalOpen(true);
@@ -43,6 +45,7 @@ export function AppProvider({ children }) {
     setAuthModalOpen(false);
   };
 
+  // Cart
   const addToCart = (product, qty = 1) => {
     if (!currentUser) {
       openAuthModal('Авторизуйтесь, чтобы добавить товары в корзину');
@@ -79,10 +82,12 @@ export function AppProvider({ children }) {
   const cartTotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
   const cartCount = cart.reduce((sum, i) => sum + i.qty, 0);
 
+  // Order
   const addOrder = (order) => {
     setOrders((prev) => [order, ...prev]);
   };
 
+  // Product
   const addProduct = (product) => {
     setProducts((prev) => [...prev, { ...product, id: Date.now() }]);
   };
@@ -96,6 +101,8 @@ export function AppProvider({ children }) {
   const deleteProduct = (productId) => {
     setProducts((prev) => prev.filter((p) => p.id !== productId));
   };
+
+  const myOrders = orders.filter((o) => o.userId === currentUser?.id);
 
   return (
     <AppContext.Provider
@@ -116,6 +123,8 @@ export function AppProvider({ children }) {
         addProduct,
         updateProduct,
         deleteProduct,
+        orders,
+        myOrders,
         addOrder,
         authModalOpen,
         authModalMessage,

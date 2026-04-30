@@ -452,4 +452,117 @@ export const USERS = [
   },
 ];
 
-export const ORDERS = [];
+export const ORDERS = [
+  {
+    id: 'ORD-001',
+    date: '2026-04-10',
+    userId: 2,
+    clientName: 'Иван',
+    clientEmail: 'client@mail.ru',
+    clientPhone: '+7 (900) 123-45-67',
+    address: 'г. Москва, ул. Пушкина, д. 1, кв. 1',
+    paymentMethod: 'card',
+    status: 'delivered',
+    items: [
+      { productId: 1, name: 'Светодиодная лампочка E14', price: 89, qty: 5 },
+      { productId: 2, name: 'Светодиодная лампочка E27', price: 120, qty: 2 },
+    ],
+    total: 685,
+  },
+  {
+    id: 'ORD-002',
+    date: '2026-04-01',
+    userId: 3,
+    clientName: 'Мария',
+    clientEmail: 'mary@gmail.com',
+    clientPhone: '+7 (901) 123-45-67',
+    address: 'г. Санкт-Петербург, ул. Пушкина, д. 1, кв. 1',
+    paymentMethod: 'cash',
+    status: 'delivering',
+    items: [
+      { productId: 12, name: 'Лампа накаливания E27', price: 25, qty: 10 },
+      { productId: 8, name: 'Энергосберегающая лампочка E27', price: 65, qty: 3 },
+    ],
+    total: 445,
+  },
+  {
+    id: 'ORD-003',
+    date: '2026-03-20',
+    userId: 2,
+    clientName: 'Иван',
+    clientEmail: 'client@mail.ru',
+    clientPhone: '+7 (900) 123-45-67',
+    address: 'г. Москва, ул. Пушкина, д. 1, кв. 1',
+    paymentMethod: 'card',
+    status: 'new',
+    items: [
+      { productId: 7, name: 'Светодиодная лампочка GU10', price: 130, qty: 4 },
+    ],
+    total: 520,
+  },
+  {
+    id: 'ORD-004',
+    date: '2026-03-10',
+    userId: 5,
+    clientName: 'Анна',
+    clientEmail: 'anna@mail.ru',
+    clientPhone: '+7 (903) 123-45-67',
+    address: 'г. Сочи, ул. Пушкина, д. 1, кв. 1',
+    paymentMethod: 'cash',
+    status: 'cancelled',
+    items: [
+      { productId: 4, name: 'Светодиодная лампочка E40', price: 250, qty: 2 },
+    ],
+    total: 500,
+  },
+  {
+    id: 'ORD-005',
+    date: '2026-03-01',
+    userId: 6,
+    clientName: 'Дмитрий',
+    clientEmail: 'dmitry@mail.ru',
+    clientPhone: '+7 (904) 123-45-67',
+    address: 'г. Новосибирск, ул. Пушкина, д. 1, кв. 1',
+    paymentMethod: 'card',
+    status: 'new',
+    items: [
+      { productId: 1, name: 'Лампа 10Вт теплый белый E14', price: 89, qty: 10 },
+      { productId: 15, name: 'Лампа 6Вт E14 холодный белый', price: 79, qty: 5 },
+    ],
+    total: 1285,
+  },
+  {
+    id: 'ORD-006',
+    date: '2024-12-13',
+    userId: 3,
+    clientName: 'Мария',
+    clientEmail: 'mary@gmail.com',
+    clientPhone: '+7 (901) 123-45-67',
+    address: 'г. Санкт-Петербург, ул. Пушкина, д. 1, кв. 1',
+    paymentMethod: 'card',
+    status: 'delivered',
+    items: [
+      { productId: 19, name: 'Светодиодная лампочка GU10', price: 115, qty: 6 },
+    ],
+    total: 690,
+  }
+];
+
+import { subDays } from 'date-fns';
+
+const formatDate = (date) => {
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const formattedDate = `${day}.${month}`;
+  return formattedDate;
+};
+
+export const CHART_DATA = [
+  { day: formatDate(subDays(new Date(), 6)), orders: 4 },
+  { day: formatDate(subDays(new Date(), 5)), orders: 7 },
+  { day: formatDate(subDays(new Date(), 4)), orders: 3 },
+  { day: formatDate(subDays(new Date(), 3)), orders: 9 },
+  { day: formatDate(subDays(new Date(), 2)), orders: 12 },
+  { day: formatDate(subDays(new Date(), 1)), orders: 6 },
+  { day: formatDate(new Date()), orders: 2 },
+];

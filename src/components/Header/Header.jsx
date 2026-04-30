@@ -49,11 +49,14 @@ export default function Header() {
           </Box>
 
           {/* Каталог */}
-          <Tooltip title="Каталог">
-            <IconButton color="inherit" component={Link} to="/catalog">
-              <MenuBookIcon />
-            </IconButton>
-          </Tooltip>
+          <Button
+            color="inherit"
+            startIcon={<MenuBookIcon />}
+            component={Link}
+            to="/catalog"
+          >
+            Каталог
+          </Button>
         </Box>
 
         <Box className={styles.rightGroup}>
@@ -68,6 +71,7 @@ export default function Header() {
               >
                 Заказы
               </Button>
+
               <Button
                 color="inherit"
                 startIcon={<PeopleIcon />}
@@ -81,29 +85,37 @@ export default function Header() {
 
           {/* Корзина (скрыто для админа) */}
           {!isAdmin && (
-            <Tooltip title="Корзина">
-              <IconButton color="inherit" onClick={handleCartClick}>
+            <Button
+              color="inherit"
+              onClick={handleCartClick}
+              startIcon={
                 <Badge badgeContent={cartCount} color="error">
                   <ShoppingCartIcon />
                 </Badge>
-              </IconButton>
-            </Tooltip>
+              }
+            >
+              Корзина
+            </Button>
           )}
 
           {/* ЛК */}
-          <Tooltip title={isAuth ? 'Личный кабинет' : 'Войти'}>
-            <IconButton color="inherit" onClick={handleDashboardClick}>
-              <PersonIcon />
-            </IconButton>
-          </Tooltip>
+          <Button
+            color="inherit"
+            startIcon={<PersonIcon />}
+            onClick={handleDashboardClick}
+          >
+            {isAuth ? 'Личный кабинет' : 'Войти'}
+          </Button>
 
           {/* Выход */}
           {isAuth && (
-            <Tooltip title="Выйти">
-              <IconButton color="inherit" onClick={logout}>
-                <LogoutIcon />
-              </IconButton>
-            </Tooltip>
+            <Button
+              color="inherit"
+              startIcon={<LogoutIcon />}
+              onClick={logout}
+            >
+              Выйти
+            </Button>
           )}
         </Box>
 

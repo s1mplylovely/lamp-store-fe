@@ -1,0 +1,11 @@
+.settingsForm {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 500px;
+}
+
+.saveBtn {
+    background: var(--dark) !important;
+    width: fit-content;
+}
