@@ -451,3 +451,5 @@ export const USERS = [
     isBlocked: false,
   },
 ];
+
+export const ORDERS = [];

@@ -1,0 +1,66 @@
+.root {
+  padding-top: 24px !important;
+  padding-bottom: 40px !important;
+}
+
+.backBtn {
+  margin-bottom: 16px !important;
+  color: var(--bottom-text) !important;
+}
+
+.paper {
+  padding: 32px !important;
+  text-align: center;
+}
+
+.heading {
+  font-weight: 700 !important;
+  color: var(--dark);
+  margin-bottom: 16px !important;
+  text-align: center;
+}
+
+.total {
+  font-weight: 700 !important;
+  color: var(--dark);
+  margin-bottom: 16px !important;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.infoRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.confirmBtn {
+  background: var(--dark) !important;
+}
+
+.successIcon {
+  font-size: 72px !important;
+  color: var(--success);
+  margin-bottom: 16px;
+}
+
+.errorIcon {
+  font-size: 72px !important;
+  color: var(--error);
+  margin-bottom: 16px;
+}
+
+.statusTitle {
+  font-weight: 700 !important;
+  color: var(--dark);
+  margin-bottom: 12px !important;
+}
+
+.dashBtn {
+  background: var(--dark) !important;
+}

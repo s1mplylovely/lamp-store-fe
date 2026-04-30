@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import { PRODUCTS, USERS } from '../data/mockData';
+import { PRODUCTS, USERS, ORDERS } from '../data/mockData';
 
 const AppContext = createContext(null);
 
@@ -8,7 +8,9 @@ export function AppProvider({ children }) {
   const [authModalMessage, setAuthModalMessage] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
   const [cart, setCart] = useState([]);
+  const [users, setUsers] = useState(USERS);
   const [products, setProducts] = useState(PRODUCTS);
+  const [orders, setOrders] = useState(ORDERS);
 
   const login = (login) => {
     const user = USERS.find((u) => u.email === login || u.phone === login);
@@ -77,6 +79,10 @@ export function AppProvider({ children }) {
   const cartTotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
   const cartCount = cart.reduce((sum, i) => sum + i.qty, 0);
 
+  const addOrder = (order) => {
+    setOrders((prev) => [order, ...prev]);
+  };
+
   const addProduct = (product) => {
     setProducts((prev) => [...prev, { ...product, id: Date.now() }]);
   };
@@ -110,6 +116,7 @@ export function AppProvider({ children }) {
         addProduct,
         updateProduct,
         deleteProduct,
+        addOrder,
         authModalOpen,
         authModalMessage,
         openAuthModal,
