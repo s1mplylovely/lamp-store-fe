@@ -400,3 +400,54 @@ export const PRODUCTS = [
     image: null,
   },
 ];
+
+export const USERS = [
+  {
+    id: 1,
+    name: 'Петр',
+    email: 'admin@lampstore.ru',
+    phone: '+7 (900) 000-00-00',
+    isAdmin: true,
+    isBlocked: false,
+  },
+  {
+    id: 2,
+    name: 'Иван',
+    email: 'client@mail.ru',
+    phone: '+7 (900) 123-45-67',
+    isAdmin: false,
+    isBlocked: false,
+  },
+  {
+    id: 3,
+    name: 'Мария',
+    email: 'mary@gmail.com',
+    phone: '+7 (901) 123-45-67',
+    isAdmin: false,
+    isBlocked: false,
+  },
+  {
+    id: 4,
+    name: 'Алексей',
+    email: 'alex@yandex.ru',
+    phone: '+7 (902) 123-45-67',
+    isAdmin: false,
+    isBlocked: true,
+  },
+  {
+    id: 5,
+    name: 'Анна',
+    email: 'anna@mail.ru',
+    phone: '+7 (903) 123-45-67',
+    isAdmin: true,
+    isBlocked: false,
+  },
+  {
+    id: 6,
+    name: 'Дмитрий',
+    email: 'dmitry@mail.ru',
+    phone: '+7 (904) 123-45-67',
+    isAdmin: false,
+    isBlocked: false,
+  },
+];

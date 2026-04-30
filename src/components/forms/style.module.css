@@ -1,0 +1,11 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.btn {
+    background: var(--dark) !important;
+    padding: 12px !important;
+    font-size: 16px !important;
+}

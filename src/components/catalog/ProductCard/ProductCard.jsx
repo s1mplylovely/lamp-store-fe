@@ -52,7 +52,7 @@ export default function ProductCard({ product }) {
           <Typography variant="h6" className={styles.price}>{product.price} ₽</Typography>
           {/* Количество */}
           <Typography variant="body2" color={product.stock > 0 ? 'success.main' : 'error.main'}>
-            {product.stock > 0 ? `В наличии: ${product.stock}` : 'Нет в наличии'}
+            {product.stock > 0 ? `В наличии: ${product.stock} шт.` : 'Нет в наличии'}
           </Typography>
         </Box>
       </CardContent>
@@ -60,11 +60,16 @@ export default function ProductCard({ product }) {
       {/* Редактировать для админа, в корзину для клента */}
       <CardActions className={styles.actions}>
         {isAdmin ? (
-          <Tooltip title="Редактировать товар">
-            <IconButton onClick={() => navigate(`/catalog/${product.id}/edit`)} color="primary">
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
+          <Button
+            variant="contained"
+            size="small"
+            startIcon={<EditIcon />}
+            onClick={() => navigate(`/catalog/${product.id}/edit`)}
+            className={styles.btn}
+            fullWidth
+          >
+            Редактировать товар
+          </Button>
         ) : (
           <Button
             variant="contained"
@@ -72,7 +77,7 @@ export default function ProductCard({ product }) {
             startIcon={<AddShoppingCartIcon />}
             onClick={() => addToCart(product)}
             disabled={product.stock === 0}
-            className={styles.cartBtn}
+            className={styles.btn}
             fullWidth
           >
             Добавить в корзину

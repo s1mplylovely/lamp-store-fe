@@ -1,0 +1,90 @@
+.root {
+  padding-top: 24px !important;
+  padding-bottom: 40px !important;
+}
+
+.layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+.backBtn {
+  margin-bottom: 16px !important;
+  color: var(--bottom-text) !important;
+}
+
+.imageBox {
+  height: 300px;
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--dark) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.productIcon {
+  font-size: 120px !important;
+  color: var(--accent);
+  opacity: 0.9;
+}
+
+.hiddenChip {
+  position: absolute !important;
+  top: 12px;
+  right: 12px;
+}
+
+.name {
+  font-weight: 700 !important;
+  color: var(--dark);
+  margin-bottom: 4px !important;
+}
+
+.chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  margin-top: 8px;
+}
+
+.price {
+  font-weight: 700 !important;
+  color: var(--dark);
+  margin-bottom: 8px !important;
+}
+
+.description {
+  color: var(--bottom-text);
+  margin-bottom: 20px !important;
+  line-height: 1.6 !important;
+}
+
+.actionRow {
+  display: flex;
+  gap: 12px;
+}
+
+.cartBtn .editBtn {
+  background: var(--dark) !important;
+}
+
+.specsTitle {
+  font-weight: 700 !important;
+  margin-bottom: 12px !important;
+  color: var(--dark);
+}
+
+.specLabel {
+  font-weight: 600 !important;
+  color: var(--bottom-text);
+  width: 280px;
+}

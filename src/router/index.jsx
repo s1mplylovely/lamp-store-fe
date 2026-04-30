@@ -1,6 +1,8 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
-import CatalogPage from '../pages/CatalogPage/CatalogPage.jsx';
+import CatalogPage from '../pages/CatalogPage/CatalogPage';
+import AuthPage from '../pages/AuthPage/AuthPage';
+import ProductPage from '../pages/ProductPage/ProductPage';
 
 export const router = createBrowserRouter([
   {
@@ -9,6 +11,8 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/catalog" replace /> },
       { path: 'catalog', element: <CatalogPage /> },
+      { path: 'catalog/:id', element: <ProductPage /> },
     ],
-  }
+  },
+  { path: '/auth', element: <AuthPage /> },
 ]);

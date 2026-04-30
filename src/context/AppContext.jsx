@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import { PRODUCTS } from '../data/mockData';
+import { PRODUCTS, USERS } from '../data/mockData';
 
 const AppContext = createContext(null);
 
@@ -9,6 +9,28 @@ export function AppProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [cart, setCart] = useState([]);
   const [products, setProducts] = useState(PRODUCTS);
+
+  const login = (login) => {
+    const user = USERS.find((u) => u.email === login || u.phone === login);
+    if (user) {
+      setCurrentUser(user);
+      return true;
+    }
+    return false;
+  };
+
+  const loginAsCustomer = () => {
+    setCurrentUser(USERS[1]);
+  };
+
+  const loginAsAdmin = () => {
+    setCurrentUser(USERS[0]);
+  };
+
+  const logout = () => {
+    setCurrentUser(null);
+    setCart([]);
+  };
 
   const openAuthModal = (message = 'Авторизуйтесь, чтобы начать покупки') => {
     setAuthModalMessage(message);
@@ -36,12 +58,33 @@ export function AppProvider({ children }) {
     return true;
   };
 
+  const addProduct = (product) => {
+    setProducts((prev) => [...prev, { ...product, id: Date.now() }]);
+  };
+
+  const updateProduct = (productId, data) => {
+    setProducts((prev) =>
+      prev.map((p) => (p.id === productId ? { ...p, ...data } : p))
+    );
+  };
+
+  const deleteProduct = (productId) => {
+    setProducts((prev) => prev.filter((p) => p.id !== productId));
+  };
+
   return (
     <AppContext.Provider
       value={{
         currentUser,
-        products,
+        login,
+        loginAsCustomer,
+        loginAsAdmin,
+        logout,
         addToCart,
+        products,
+        addProduct,
+        updateProduct,
+        deleteProduct,
         authModalOpen,
         authModalMessage,
         openAuthModal,
