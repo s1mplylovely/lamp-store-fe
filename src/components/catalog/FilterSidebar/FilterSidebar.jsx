@@ -4,9 +4,9 @@ import {
 } from '@mui/material';
 import styles from './FilterSidebar.module.css';
 
-const BASE_TYPES = ['E14', 'E27', 'E40', 'G4', 'G5.3', 'G9', 'GU5.3', 'GU10'];
-const COLORS = ['холодный белый', 'прозрачный', 'теплый белый', 'красный', 'синий', 'разноцветный'];
-const CATEGORIES = ['светодиодные', 'энергосберегающие', 'люминесцентные', 'накаливания'];
+export const BASE_TYPES = ['E14', 'E27', 'E40', 'G4', 'G5.3', 'G9', 'GU5.3', 'GU10'];
+export const COLORS = ['холодный белый', 'прозрачный', 'теплый белый', 'красный', 'синий', 'разноцветный'];
+export const CATEGORIES = ['светодиодные', 'энергосберегающие', 'люминесцентные', 'накаливания'];
 
 export default function FilterSidebar({ filters, onChange }) {
   const handleCheckbox = (group, value) => {

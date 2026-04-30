@@ -1,0 +1,54 @@
+.root {
+  padding-top: 24px !important;
+  padding-bottom: 40px !important;
+}
+
+.layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+.backBtn {
+  margin-bottom: 16px !important;
+  color: var(--bottom-text) !important;
+}
+
+.heading {
+  font-weight: 700 !important;
+  color: var(--dark);
+  margin-bottom: 20px !important;
+}
+
+.paper {
+  padding: 24px !important;
+  width: 100% !important;
+}
+
+.sectionTitle {
+  font-weight: 700 !important;
+  color: var(--dark);
+  margin-bottom: 16px !important;
+}
+
+.photoUpload {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.saveBtn {
+  background: var(--dark) !important;
+}
