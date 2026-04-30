@@ -1,0 +1,38 @@
+.footer {
+  background: var(--dark);
+  padding: 12px 0px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.divider {
+  border-color: var(--bg) !important;
+}
+
+.contacts {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--bg);
+}
+
+.copy {
+  text-align: center;
+  color: var(--bg);
+  margin-top: 2px;
+}

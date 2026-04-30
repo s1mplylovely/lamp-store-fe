@@ -1,0 +1,48 @@
+.appBar {
+  background: var(--dark);
+  border-radius: 0 !important;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.leftGroup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.rightGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: inherit;
+  margin-right: 8px;
+  min-width: max-content;
+}
+
+.logo {
+  color: var(--accent);
+  font-size: 28px;
+}
+
+.storeName {
+  font-weight: 700;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.adminNav {
+  display: flex;
+  gap: 4px;
+}
