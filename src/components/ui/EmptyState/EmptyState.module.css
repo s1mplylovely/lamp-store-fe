@@ -1,0 +1,24 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 80px 24px;
+  text-align: center;
+}
+
+.icon {
+  font-size: 64px;
+  color: var(--bottom-text);
+}
+
+.title {
+  font-weight: 600 !important;
+  color: var(--bottom-text);
+}
+
+.btn {
+  margin-top: 8px !important;
+  background: var(--dark) !important;
+}

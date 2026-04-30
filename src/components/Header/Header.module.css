@@ -33,11 +33,11 @@
 
 .logo {
   color: var(--accent);
-  font-size: 28px;
+  font-size: 28px !important;
 }
 
 .storeName {
-  font-weight: 700;
+  font-weight: 700 !important;
   letter-spacing: 1px;
   white-space: nowrap;
 }
