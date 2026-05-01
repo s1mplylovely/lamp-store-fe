@@ -112,6 +112,21 @@ export function AppProvider({ children }) {
     setProducts((prev) => prev.filter((p) => p.id !== productId));
   };
 
+  // User
+  const addUser = (user) => {
+    setUsers((prev) => [...prev, { ...user, id: Date.now() }]);
+  };
+
+  const updateUser = (userId, data) => {
+    setUsers((prev) =>
+      prev.map((u) => (u.id === userId ? { ...u, ...data } : u))
+    );
+  };
+
+  const deleteUser = (userId) => {
+    setUsers((prev) => prev.filter((u) => u.id !== userId));
+  };
+
   const myOrders = orders.filter((o) => o.userId === currentUser?.id);
 
   return (
@@ -133,9 +148,12 @@ export function AppProvider({ children }) {
         addProduct,
         updateProduct,
         deleteProduct,
+        users,
+        addUser,
+        updateUser,
+        deleteUser,
         orders,
         myOrders,
-        addOrder,
         addOrder,
         updateOrder,
         deleteOrder,

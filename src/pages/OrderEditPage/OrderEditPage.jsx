@@ -101,9 +101,7 @@ export default function OrderEditPage() {
           <Grid item xs={12} sm={6}>
             <TextField label="E-mail" fullWidth value={form.clientEmail} onChange={(e) => set('clientEmail', e.target.value)} />
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField label="Адрес доставки" fullWidth value={form.address} onChange={(e) => set('address', e.target.value)} />
-          </Grid>
+          <TextField label="Адрес доставки" fullWidth value={form.address} onChange={(e) => set('address', e.target.value)} />
         </Grid>
 
         <Divider sx={{ mb: 3 }} />

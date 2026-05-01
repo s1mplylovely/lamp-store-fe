@@ -8,7 +8,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SaveIcon from '@mui/icons-material/Save';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useApp } from '../../context/AppContext';
-import FilterSidebar, { BASE_TYPES, COLORS, CATEGORIES } from '../../components/catalog/FilterSidebar/FilterSidebar';
+import { BASE_TYPES, COLORS, CATEGORIES } from '../../components/catalog/FilterSidebar/FilterSidebar';
 import styles from './ProductEditPage.module.css';
 
 const emptyProduct = {
@@ -83,7 +83,6 @@ export default function ProductEditPage() {
   return (
     <Container maxWidth={false} className={styles.root}>
       <Box className={styles.layout}>
-        <FilterSidebar filters={filters} onChange={setFilters} />
 
         <Box className={styles.main}>
           <Button

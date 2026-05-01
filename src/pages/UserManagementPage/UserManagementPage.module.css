@@ -1,0 +1,53 @@
+.root {
+  padding-top: 24px !important;
+  padding-bottom: 40px !important;
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.heading {
+  font-weight: 700 !important;
+  color: var(--dark);
+}
+
+.addBtn {
+  background: var(--dark) !important;
+}
+
+.searchRow {
+  margin-bottom: 16px;
+  max-width: 500px;
+}
+
+.tableHead {
+  background: var(--dark);
+}
+
+.tableHead th {
+  color: var(--light) !important;
+  font-weight: 600 !important;
+}
+
+.myRow {
+  background: #f0f4ff !important;
+}
+
+.userCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meChip {
+  background: var(--dark) !important;
+  color: var(--light) !important;
+  font-size: 10px !important;
+  height: 18px !important;
+}

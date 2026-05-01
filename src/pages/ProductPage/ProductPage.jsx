@@ -10,7 +10,6 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined';
-import FilterSidebar from '../../components/catalog/FilterSidebar/FilterSidebar';
 import { useApp } from '../../context/AppContext';
 import DeleteDialog from '../../components/ui/DeleteDialog';
 import styles from './ProductPage.module.css';
@@ -66,7 +65,6 @@ export default function ProductPage() {
   return (
     <Container maxWidth="xl" className={styles.root}>
       <Box className={styles.layout}>
-        <FilterSidebar filters={filters} onChange={setFilters} />
 
         <Box className={styles.main}>
           <Button

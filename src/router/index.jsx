@@ -10,6 +10,8 @@ import OrderConfirmationPage from '../pages/OrderConfirmationPage/OrderConfirmat
 import DashboardPage from '../pages/DashboardPage/DashboardPage';
 import OrdersManagementPage from '../pages/OrdersManagementPage/OrdersManagementPage';
 import OrderEditPage from '../pages/OrderEditPage/OrderEditPage';
+import UserManagementPage from '../pages/UserManagementPage/UserManagementPage';
+import UserFormPage from '../pages/UserFormPage/UserFormPage';
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +28,9 @@ export const router = createBrowserRouter([
       { path: 'dashboard', element: <DashboardPage /> },
       { path: 'admin/orders', element: <OrdersManagementPage /> },
       { path: 'admin/orders/:id/edit', element: <OrderEditPage /> },
+      { path: 'admin/users', element: <UserManagementPage /> },
+      { path: 'admin/users/new', element: <UserFormPage /> },
+      { path: 'admin/users/:id/edit', element: <UserFormPage /> },
     ],
   },
   { path: '/auth', element: <AuthPage /> },
