@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Box, Typography, Button, Grid, Container } from '@mui/material';
+import { Box, Typography, Button, Grid, Container, useMediaQuery, useTheme } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import FilterSidebar from '../../components/catalog/FilterSidebar/FilterSidebar';
@@ -22,6 +22,8 @@ export default function CatalogPage() {
   const { products, currentUser } = useApp();
   const navigate = useNavigate();
   const isAdmin = currentUser?.isAdmin;
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const [filters, setFilters] = useState(defaultFilters);
   const [search, setSearch] = useState('');
@@ -52,7 +54,7 @@ export default function CatalogPage() {
 
       <Box className={styles.layout}>
         {/* Фильтры */}
-        <FilterSidebar filters={filters} onChange={setFilters} />
+        {!isMobile && <FilterSidebar filters={filters} onChange={setFilters} />}
 
         {/* Заголовок + добавить товар (админ) */}
         <Box className={styles.listArea}>
@@ -65,7 +67,7 @@ export default function CatalogPage() {
                 onClick={handleAddNew}
                 className={styles.addBtn}
               >
-                Добавить новый товар
+                Добавить товар
               </Button>
             </Box>
           )}
@@ -73,6 +75,9 @@ export default function CatalogPage() {
           {!isAdmin && (
             <Typography variant="h5" className={styles.heading}>Каталог товаров</Typography>
           )}
+
+          {/* Фильтры */}
+          {isMobile && <FilterSidebar filters={filters} onChange={setFilters} />}
 
           {/* Поиск */}
           <Box className={styles.searchRow}>

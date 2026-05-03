@@ -1,15 +1,18 @@
+import { useState } from 'react';
 import {
-  Box, Typography, Divider, FormGroup, FormControlLabel, Checkbox,
-  TextField, Paper, Accordion, AccordionSummary, AccordionDetails
+  Box, Typography, Divider, FormGroup, FormControlLabel, Checkbox, Accordion, AccordionSummary,
+  AccordionDetails, TextField, Paper, Drawer, IconButton, Button, useMediaQuery, useTheme
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import CloseIcon from '@mui/icons-material/Close';
 import styles from './FilterSidebar.module.css';
 
 export const BASE_TYPES = ['E14', 'E27', 'E40', 'G4', 'G5.3', 'G9', 'GU5.3', 'GU10'];
 export const COLORS = ['холодный белый', 'прозрачный', 'теплый белый', 'красный', 'синий', 'разноцветный'];
 export const CATEGORIES = ['светодиодные', 'энергосберегающие', 'люминесцентные', 'накаливания'];
 
-export default function FilterSidebar({ filters, onChange }) {
+function FilterContent({ filters, onChange }) {
   const handleCheckbox = (group, value) => {
     const current = filters[group] || [];
     const updated = current.includes(value)
@@ -57,9 +60,7 @@ export default function FilterSidebar({ filters, onChange }) {
   );
 
   return (
-    <Paper className={styles.root} elevation={1}>
-      <Typography variant="h6" className={styles.heading}>Фильтры</Typography>
-
+    <Box>
       {/* Цена */}
       <Box className={styles.section}>
         <Typography variant="subtitle2" className={styles.label}>Цена (₽)</Typography>
@@ -91,6 +92,63 @@ export default function FilterSidebar({ filters, onChange }) {
       <Divider className={styles.divider} />
 
       {renderCheckboxGroup('Цвет', COLORS, 'color')}
+    </Box>
+  );
+}
+
+export default function FilterSidebar({ filters, onChange }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  if (isMobile) {
+    return (
+      <>
+        <Button
+          variant="outlined"
+          startIcon={<FilterListIcon />}
+          onClick={() => setDrawerOpen(true)}
+          className={styles.filterBtn}
+          size="small"
+        >
+          Фильтры
+        </Button>
+
+        <Drawer
+          anchor="left"
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+          PaperProps={{ className: styles.filterDrawer }}
+        >
+          <Box className={styles.filterDrawerHeader}>
+            <Typography variant="h6" className={styles.heading}>Фильтры</Typography>
+            <IconButton onClick={() => setDrawerOpen(false)} size="small">
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <Divider />
+          <Box className={styles.filterDrawerBody}>
+            <FilterContent filters={filters} onChange={onChange} />
+          </Box>
+          <Box className={styles.filterDrawerFooter}>
+            <Button
+              variant="contained"
+              fullWidth
+              className={styles.applyBtn}
+              onClick={() => setDrawerOpen(false)}
+            >
+              Применить
+            </Button>
+          </Box>
+        </Drawer>
+      </>
+    );
+  }
+
+  return (
+    <Paper className={styles.root} elevation={1}>
+      <Typography variant="h6" className={styles.heading}>Фильтры</Typography>
+      <FilterContent filters={filters} onChange={onChange} />
     </Paper>
   );
 }

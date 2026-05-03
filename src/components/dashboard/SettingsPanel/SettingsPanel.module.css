@@ -9,3 +9,15 @@
     background: var(--dark) !important;
     width: fit-content;
 }
+
+/* Mobile */
+@media (max-width: 599px) {
+
+    .settingsForm {
+        max-width: 100%;
+    }
+
+    .saveBtn {
+        width: 100%;
+    }
+}

@@ -41,3 +41,31 @@
 .saveBtn {
   background: var(--dark) !important;
 }
+
+.tableWrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 599px) {
+  .root {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .paper {
+    padding: 16px !important;
+  }
+
+  .heading {
+    font-size: 1.2rem !important;
+  }
+
+  .buttons {
+    flex-direction: column-reverse;
+  }
+
+  .buttons>* {
+    width: 100%;
+  }
+}

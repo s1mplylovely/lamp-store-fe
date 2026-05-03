@@ -34,3 +34,8 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+.MuiDrawer-paper {
+  width: 80vw !important;
+  border-radius: 0 !important;
+}

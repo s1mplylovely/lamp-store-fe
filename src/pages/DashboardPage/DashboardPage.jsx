@@ -24,9 +24,6 @@ export default function DashboardPage() {
       <Typography variant="h4" className={styles.heading}>
         {isAdmin ? 'Панель администратора' : 'Личный кабинет'}
       </Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-        {currentUser.name}
-      </Typography>
 
       <Paper elevation={1}>
         <Tabs value={tab} onChange={(_, v) => setTab(v)} className={styles.tabs}>

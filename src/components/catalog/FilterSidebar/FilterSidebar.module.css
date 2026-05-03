@@ -6,7 +6,7 @@
   height: fit-content;
   position: sticky;
   top: 80px;
-  max-height: 80vh;
+  max-height: 80vh !important;
   overflow-y: auto;
   padding-right: 4px;
 }
@@ -46,4 +46,43 @@
 
 .priceRow>* {
   flex: 1;
+}
+
+/* Mobile */
+.root {
+  max-height: 100vh;
+}
+
+.filterBtn {
+  border-color: var(--dark) !important;
+  color: var(--dark) !important;
+  margin-bottom: 12px !important;
+  align-self: flex-start;
+}
+
+.filterDrawer {
+  width: 300px !important;
+  max-width: 90vw !important;
+}
+
+.filterDrawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+}
+
+.filterDrawerBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px 16px;
+}
+
+.filterDrawerFooter {
+  padding: 16px;
+  border-top: 1px solid var(--light);
+}
+
+.applyBtn {
+  background: var(--dark) !important;
 }

@@ -14,7 +14,7 @@
 
 .box {
     display: flex;
-    align-items: center;
+    flex-direction: row;
     gap: 12px;
 }
 
@@ -50,4 +50,15 @@
 
 .topName {
     flex: 1;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .statNum {
+        font-size: 1.4rem !important;
+    }
+
+    .box {
+        flex-direction: column;
+    }
 }

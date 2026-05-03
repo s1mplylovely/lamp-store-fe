@@ -2,3 +2,9 @@
     padding: 16px 24px;
     background: #f9f9f9;
 }
+
+@media (max-width: 599px) {
+    .detail {
+        padding: 12px;
+    }
+}

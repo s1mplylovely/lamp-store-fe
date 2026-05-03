@@ -83,3 +83,35 @@
   background: var(--dark) !important;
   margin-top: 16px !important;
 }
+
+/* Mobile */
+@media (max-width: 767px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .summary {
+    width: 100%;
+    position: static;
+  }
+
+  .heading {
+    font-size: 1.5rem !important;
+    margin-bottom: 16px !important;
+  }
+
+  .item {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .itemControls {
+    gap: 6px;
+  }
+
+  .itemTotal {
+    min-width: 55px;
+    font-size: 14px !important;
+  }
+}

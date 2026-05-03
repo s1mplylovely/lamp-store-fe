@@ -33,3 +33,61 @@
   color: var(--light) !important;
   font-weight: 600 !important;
 }
+
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  padding: 16px !important;
+  position: sticky;
+  top: 80px;
+}
+
+.sidebarMobile {
+  display: none;
+}
+
+.sidebarDesktop {
+  display: block;
+}
+
+.sidebarTitle {
+  font-weight: 700 !important;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
+@media (max-width: 899px) {
+  .sidebarDesktop {
+    display: none;
+  }
+
+  .sidebarMobile {
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .layout {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+@media (max-width: 599px) {
+  .root {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .heading {
+    font-size: 1.3rem !important;
+    margin-bottom: 16px !important;
+  }
+
+  .searchRow {
+    max-width: 90vw;
+  }
+}

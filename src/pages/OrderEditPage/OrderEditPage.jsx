@@ -129,38 +129,40 @@ export default function OrderEditPage() {
         <Divider sx={{ my: 3 }} />
 
         <Typography variant="h6" className={styles.sectionTitle}>Состав заказа</Typography>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Товар</TableCell>
-              <TableCell align="right">Цена</TableCell>
-              <TableCell align="center">Кол-во</TableCell>
-              <TableCell align="right">Сумма</TableCell>
-              <TableCell />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {form.items.map((item, idx) => (
-              <TableRow key={idx}>
-                <TableCell>{item.name}</TableCell>
-                <TableCell align="right">{item.price} ₽</TableCell>
-                <TableCell align="center">
-                  <QuantitySelector
-                    value={item.qty}
-                    onIncrement={() => handleQty(idx, item.qty + 1)}
-                    onDecrement={() => handleQty(idx, item.qty - 1)}
-                  />
-                </TableCell>
-                <TableCell align="right">{(item.price * item.qty).toLocaleString('ru')} ₽</TableCell>
-                <TableCell>
-                  <IconButton size="small" color="error" onClick={() => setDeleteIdx(idx)}>
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
-                </TableCell>
+        <Box className={styles.tableWrapper}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Товар</TableCell>
+                <TableCell align="right">Цена</TableCell>
+                <TableCell align="center">Кол-во</TableCell>
+                <TableCell align="right">Сумма</TableCell>
+                <TableCell />
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {form.items.map((item, idx) => (
+                <TableRow key={idx}>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell align="right">{item.price} ₽</TableCell>
+                  <TableCell align="center">
+                    <QuantitySelector
+                      value={item.qty}
+                      onIncrement={() => handleQty(idx, item.qty + 1)}
+                      onDecrement={() => handleQty(idx, item.qty - 1)}
+                    />
+                  </TableCell>
+                  <TableCell align="right">{(item.price * item.qty).toLocaleString('ru')} ₽</TableCell>
+                  <TableCell>
+                    <IconButton size="small" color="error" onClick={() => setDeleteIdx(idx)}>
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Box>
 
         <Box className={styles.totalRow}>
           <Typography variant="h6">Итого: {total.toLocaleString('ru')} ₽</Typography>

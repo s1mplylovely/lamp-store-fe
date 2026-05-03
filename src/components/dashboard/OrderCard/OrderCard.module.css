@@ -20,3 +20,15 @@
     font-weight: 700 !important;
     margin-left: auto;
 }
+
+/* Mobile */
+@media (max-width: 767px) {
+    .orderHeader {
+        gap: 8px;
+    }
+
+    .orderTotal {
+        margin-left: 0;
+        width: 100%;
+    }
+}

@@ -46,3 +46,44 @@
   display: flex;
   gap: 4px;
 }
+
+/* Mobile */
+.drawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+}
+
+.drawerList {
+  padding: 8px 0 !important;
+}
+
+.drawerItem {
+  color: var(--dark) !important;
+  padding: 12px 16px !important;
+  transition: background 0.15s !important;
+}
+
+.drawerItem span {
+  font-size: 15px;
+}
+
+.icon {
+  color: var(--dark) !important;
+}
+
+.divider {
+  border-color: var(--dark) !important;
+}
+
+@media (max-width: 600px) {
+  .storeName {
+    font-size: 14px !important;
+    letter-spacing: 0.5px;
+  }
+
+  .logo {
+    font-size: 22px !important;
+  }
+}

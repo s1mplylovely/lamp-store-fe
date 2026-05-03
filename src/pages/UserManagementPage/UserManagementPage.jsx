@@ -60,84 +60,86 @@ export default function UserManagementPage() {
         <SearchBar value={search} onChange={setSearch} placeholder="Поиск по ID, имени, e-mail или телефону..." />
       </Box>
 
-      <Paper elevation={1} sx={{ overflow: 'hidden' }}>
-        <Table>
-          <TableHead className={styles.tableHead}>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Пользователь</TableCell>
-              <TableCell>E-mail</TableCell>
-              <TableCell>Телефон</TableCell>
-              <TableCell align="center">Заблокирован</TableCell>
-              <TableCell align="center">Админ</TableCell>
-              <TableCell align="center">Действия</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filtered.map((user) => (
-              <TableRow key={user.id} hover className={user.id === currentUser.id ? styles.myRow : ''}>
-                <TableCell>{user.id}</TableCell>
-                <TableCell>
-                  <Box className={styles.userCell}>
-                    {user.name}
-                    {user.id === currentUser.id && (
-                      <Chip label="вы" size="small" className={styles.meChip} />
-                    )}
-                  </Box>
-                </TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.phone}</TableCell>
-                <TableCell align="center">
-                  <Chip
-                    label={user.isBlocked ? 'да' : 'нет'}
-                    color={user.isBlocked ? 'error' : 'default'}
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell align="center">
-                  <Chip
-                    label={user.isAdmin ? 'да' : 'нет'}
-                    color={user.isAdmin ? 'primary' : 'default'}
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell align="center">
-                  <Tooltip title="Редактировать">
-                    <IconButton size="small" onClick={() => navigate(`/admin/users/${user.id}/edit`)}>
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Удалить">
-                    <span>
-                      <IconButton
-                        size="small"
-                        color="error"
-                        onClick={() => setDeleteUserId(user.id)}
-                        disabled={user.id === currentUser.id}
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </span>
-                  </Tooltip>
-                </TableCell>
-              </TableRow>
-            ))}
-            {filtered.length === 0 && (
+      <Box className={styles.tableWrapper}>
+        <Paper elevation={1} sx={{ overflow: 'hidden', minWidth: 650 }}>
+          <Table>
+            <TableHead className={styles.tableHead}>
               <TableRow>
-                <TableCell colSpan={7} align="center" sx={{ py: 4, color: '#999' }}>
-                  Пользователи не найдены
-                </TableCell>
+                <TableCell>ID</TableCell>
+                <TableCell>Пользователь</TableCell>
+                <TableCell>E-mail</TableCell>
+                <TableCell>Телефон</TableCell>
+                <TableCell align="center">Заблокирован</TableCell>
+                <TableCell align="center">Админ</TableCell>
+                <TableCell align="center">Действия</TableCell>
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </Paper>
-      <DeleteDialog
-        open={deleteUserId !== null}
-        onClose={() => setDeleteUserId(null)}
-        onConfirm={handleConfirmDelete}
-        entity="пользователя"
-      />
+            </TableHead>
+            <TableBody>
+              {filtered.map((user) => (
+                <TableRow key={user.id} hover className={user.id === currentUser.id ? styles.myRow : ''}>
+                  <TableCell>{user.id}</TableCell>
+                  <TableCell>
+                    <Box className={styles.userCell}>
+                      {user.name}
+                      {user.id === currentUser.id && (
+                        <Chip label="вы" size="small" className={styles.meChip} />
+                      )}
+                    </Box>
+                  </TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.phone}</TableCell>
+                  <TableCell align="center">
+                    <Chip
+                      label={user.isBlocked ? 'да' : 'нет'}
+                      color={user.isBlocked ? 'error' : 'default'}
+                      size="small"
+                    />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Chip
+                      label={user.isAdmin ? 'да' : 'нет'}
+                      color={user.isAdmin ? 'primary' : 'default'}
+                      size="small"
+                    />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Tooltip title="Редактировать">
+                      <IconButton size="small" onClick={() => navigate(`/admin/users/${user.id}/edit`)}>
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Удалить">
+                      <span>
+                        <IconButton
+                          size="small"
+                          color="error"
+                          onClick={() => setDeleteUserId(user.id)}
+                          disabled={user.id === currentUser.id}
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </span>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ))}
+              {filtered.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={7} align="center" sx={{ py: 4, color: '#999' }}>
+                    Пользователи не найдены
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </Paper>
+        <DeleteDialog
+          open={deleteUserId !== null}
+          onClose={() => setDeleteUserId(null)}
+          onConfirm={handleConfirmDelete}
+          entity="пользователя"
+        />
+      </Box>
     </Container>
   );
 }

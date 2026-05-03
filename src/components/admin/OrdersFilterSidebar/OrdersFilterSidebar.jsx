@@ -1,5 +1,5 @@
 import {
-    Paper,
+    Box,
     Typography,
     Divider,
     FormControl,
@@ -9,7 +9,6 @@ import {
     TextField,
 } from '@mui/material';
 import { ORDER_STATUSES } from '../../../data/mockData';
-import styles from './OrdersFilterSidebar.module.css';
 
 export default function OrdersFilterSidebar({
     filterStatus,
@@ -22,12 +21,7 @@ export default function OrdersFilterSidebar({
     setDateTo,
 }) {
     return (
-        <Paper className={styles.sidebar} elevation={1}>
-            <Typography variant="h6" className={styles.sidebarTitle}>
-                Фильтры
-            </Typography>
-            <Divider sx={{ my: 1 }} />
-
+        <Box>
             <FormControl fullWidth size="small" sx={{ mb: 2 }}>
                 <InputLabel>Статус</InputLabel>
                 <Select
@@ -81,6 +75,6 @@ export default function OrdersFilterSidebar({
                 value={dateTo}
                 onChange={(e) => setDateTo(e.target.value)}
             />
-        </Paper>
+        </Box>
     );
 }
