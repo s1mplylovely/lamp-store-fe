@@ -1,15 +1,19 @@
-import { useState } from 'react';
-import { Container, Box, Typography, Paper, Tabs, Tab } from '@mui/material';
-import { useApp } from '../../context/AppContext';
+import { useState, useEffect } from 'react';
+import { Container, Box, Typography, Paper, Tabs, Tab, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { SettingsPanel } from '../../components/dashboard/SettingsPanel/SettingsPanel';
 import { StatisticsPanel } from '../../components/dashboard/StatisticsPanel/StatisticsPanel';
 import { OrderCard } from '../../components/dashboard/OrderCard/OrderCard';
+import { fetchMyOrders } from '../../store/actions/orderActions';
 import styles from './DashboardPage.module.css';
 
 export default function DashboardPage() {
-  const { currentUser, myOrders, orders } = useApp();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((s) => s.auth.currentUser);
+  const { myOrders, loading } = useSelector((s) => s.orders);
+
   const [tab, setTab] = useState(0);
 
   if (!currentUser) {
@@ -18,6 +22,10 @@ export default function DashboardPage() {
   }
 
   const isAdmin = currentUser.isAdmin;
+
+  useEffect(() => {
+    if (!isAdmin && tab === 0) dispatch(fetchMyOrders());
+  }, [dispatch, isAdmin, tab]);
 
   return (
     <Container maxWidth="lg" className={styles.root}>
@@ -33,15 +41,21 @@ export default function DashboardPage() {
 
         <Box className={styles.tabContent}>
           {tab === 0 && (
-            isAdmin
-              ? <StatisticsPanel orders={orders} />
-              : (
-                myOrders.length === 0
-                  ? <Typography color="text.secondary" sx={{ p: 4, textAlign: 'center' }}>У вас пока нет заказов</Typography>
-                  : myOrders.map((o) => <OrderCard key={o.id} order={o} />)
-              )
+            isAdmin ? (
+              <StatisticsPanel />
+            ) : loading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', pt: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : myOrders.length === 0 ? (
+              <Typography color="text.secondary" sx={{ p: 4, textAlign: 'center' }}>
+                У вас пока нет заказов
+              </Typography>
+            ) : (
+              myOrders.map((o) => <OrderCard key={o.id} order={o} />)
+            )
           )}
-          {tab === 1 && <SettingsPanel user={currentUser} />}
+          {tab === 1 && <SettingsPanel />}
         </Box>
       </Paper>
     </Container>

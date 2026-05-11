@@ -1,19 +1,23 @@
 import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Container, Box, Typography, Paper, Button, Alert, Divider,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
-import { useApp } from '../../context/AppContext';
+import { createOrder, payOrder } from '../../store/actions/orderActions';
 import styles from './OrderConfirmationPage.module.css';
 
 export default function OrderConfirmationPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { currentUser, addOrder, clearCart } = useApp();
-  const [status, setStatus] = useState('pending'); // pending | success | error
+  const dispatch = useDispatch();
+  const currentUser = useSelector((s) => s.auth.currentUser);
+  const { saving, payStatus } = useSelector((s) => s.orders);
+
+  const [createdOrderId, setCreatedOrderId] = useState(null);
 
   const state = location.state;
 
@@ -25,32 +29,30 @@ export default function OrderConfirmationPage() {
   const { form, cart, cartTotal } = state;
   const isCash = form.payment === 'cash';
 
-  const handleConfirm = () => {
-    // 80% success, 20% error
-    const success = Math.random() > 0.2;
-    if (success) {
-      const newOrder = {
-        id: `ORD-${String(Date.now()).slice(-4)}`,
-        date: new Date().toISOString().slice(0, 10),
-        userId: currentUser.id,
-        clientName: form.name,
-        clientEmail: form.email,
-        clientPhone: form.phone,
-        address: form.address,
-        paymentMethod: form.payment,
-        status: 'new',
-        items: cart.map((i) => ({ productId: i.productId, name: i.name, price: i.price, qty: i.qty })),
-        total: cartTotal,
-      };
-      addOrder(newOrder);
-      clearCart();
-      setStatus('success');
-    } else {
-      setStatus('error');
+  const handleConfirm = async () => {
+    const orderPayload = {
+      address: form.address,
+      payment_method: form.payment,
+      comment: null,
+      items: cart.map((i) => ({
+        product_id: i.productId,
+        quantity: i.qty,
+        price_snapshot: i.price,
+      })),
+    };
+
+    const order = await dispatch(createOrder(orderPayload));
+    if (!order) return;
+
+    setCreatedOrderId(order.id);
+
+    if (!isCash) {
+      await dispatch(payOrder(order.id, cartTotal));
     }
   };
 
-  if (status === 'success') {
+  // Успех
+  if (createdOrderId && (isCash || payStatus === 'success')) {
     return (
       <Container maxWidth="sm" className={styles.root}>
         <Paper className={styles.paper} elevation={2}>
@@ -61,11 +63,7 @@ export default function OrderConfirmationPage() {
           <Typography color="text.secondary" sx={{ mb: 3 }}>
             Мы свяжемся с вами для подтверждения доставки.
           </Typography>
-          <Button
-            variant="contained"
-            className={styles.dashBtn}
-            onClick={() => navigate('/dashboard')}
-          >
+          <Button variant="contained" className={styles.dashBtn} onClick={() => navigate('/dashboard')}>
             В личный кабинет
           </Button>
         </Paper>
@@ -73,18 +71,15 @@ export default function OrderConfirmationPage() {
     );
   }
 
-  if (status === 'error') {
+  // Ошибка оплаты
+  if (payStatus === 'error') {
     return (
       <Container maxWidth="sm" className={styles.root}>
         <Paper className={styles.paper} elevation={2}>
           <ErrorIcon className={styles.errorIcon} />
           <Typography variant="h5" className={styles.statusTitle}>Ошибка при оплате заказа</Typography>
-          <Alert severity="error" sx={{ mb: 3 }}>Недостаточно средств</Alert>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => navigate('/cart')}
-          >
+          <Alert severity="error" sx={{ mb: 3 }}>Не удалось провести оплату. Попробуйте ещё раз.</Alert>
+          <Button variant="contained" color="error" onClick={() => navigate('/cart')}>
             Вернуться к корзине
           </Button>
         </Paper>
@@ -92,14 +87,10 @@ export default function OrderConfirmationPage() {
     );
   }
 
+  // Экран подтверждения
   return (
     <Container maxWidth="sm" className={styles.root}>
-      <Button
-        component={Link}
-        to="/checkout"
-        startIcon={<ArrowBackIcon />}
-        className={styles.backBtn}
-      >
+      <Button component={Link} to="/checkout" startIcon={<ArrowBackIcon />} className={styles.backBtn}>
         Назад к оформлению
       </Button>
 
@@ -138,9 +129,10 @@ export default function OrderConfirmationPage() {
           fullWidth
           className={styles.confirmBtn}
           onClick={handleConfirm}
+          disabled={saving}
           sx={{ mt: 3 }}
         >
-          {isCash ? 'Подтвердить' : 'Оплатить'}
+          {saving ? 'Оформление...' : isCash ? 'Подтвердить' : 'Оплатить'}
         </Button>
       </Paper>
     </Container>

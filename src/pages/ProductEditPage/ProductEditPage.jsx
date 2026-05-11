@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import {
-  Box, Container, Typography, Button, TextField, Grid, Paper,
+  Box, Container, Typography, Button, TextField, Grid, Paper, CircularProgress,
   FormControlLabel, Radio, RadioGroup, FormLabel, Divider, Switch,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SaveIcon from '@mui/icons-material/Save';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import { useApp } from '../../context/AppContext';
+import { fetchProduct, createProduct, updateProduct } from '../../store/actions/productActions';
 import { BASE_TYPES, COLORS, CATEGORIES } from '../../components/catalog/FilterSidebar/FilterSidebar';
 import styles from './ProductEditPage.module.css';
 
@@ -25,7 +26,9 @@ const emptyProduct = {
   flux: '',
   lifespan: '',
   weight: '',
-  dimensions: { l: '', w: '', h: '' },
+  length: '',
+  width: '',
+  height: '',
   description: '',
   visible: true,
 };
@@ -33,27 +36,30 @@ const emptyProduct = {
 export default function ProductEditPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { products, updateProduct, addProduct, currentUser } = useApp();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((s) => s.auth.currentUser);
+  const { current: existing, loading, saving } = useSelector((s) => s.products);
 
   const isNew = id === 'new';
-  const existing = isNew ? null : products.find((p) => p.id === Number(id));
-
-  const initial = existing
-    ? { ...existing, price: String(existing.price), stock: String(existing.stock) }
-    : emptyProduct;
-
-  const [form, setForm] = useState(initial);
+  const [form, setForm] = useState(emptyProduct);
   const [filters, setFilters] = useState({});
 
-  if (!currentUser?.isAdmin) {
-    return <Container><Typography>Нет доступа</Typography></Container>;
-  }
+  useEffect(() => {
+    if (!isNew) dispatch(fetchProduct(id));
+  }, [dispatch, id, isNew]);
+
+  useEffect(() => {
+    if (!isNew && existing) {
+      setForm({ ...existing, price: String(existing.price), stock: String(existing.stock) });
+    }
+  }, [existing, isNew]);
+
+  if (!currentUser?.isAdmin) return <Container><Typography>Нет доступа</Typography></Container>;
+  if (!isNew && loading) return <Container sx={{ pt: 6, display: 'flex', justifyContent: 'center' }}><CircularProgress /></Container>;
 
   const set = (field, value) => setForm((f) => ({ ...f, [field]: value }));
-  const setDim = (dim, val) =>
-    setForm((f) => ({ ...f, dimensions: { ...f.dimensions, [dim]: val } }));
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const data = {
       ...form,
       price: Number(form.price),
@@ -64,16 +70,14 @@ export default function ProductEditPage() {
       flux: Number(form.flux),
       lifespan: Number(form.lifespan),
       weight: Number(form.weight),
-      dimensions: {
-        l: Number(form.dimensions.l),
-        w: Number(form.dimensions.w),
-        h: Number(form.dimensions.h),
-      },
+      length: Number(form.length),
+      width: Number(form.width),
+      height: Number(form.height),
     };
     if (isNew) {
-      addProduct(data);
+      await dispatch(createProduct(data));
     } else {
-      updateProduct(existing.id, data);
+      await dispatch(updateProduct(existing.id, data));
     }
     navigate('/catalog');
   };
@@ -141,25 +145,15 @@ export default function ProductEditPage() {
                   ))}
                 </RadioGroup>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}><TextField label="Цветовая температура, К" type="number" fullWidth value={form.colorTemp} onChange={(e) => set('colorTemp', e.target.value)} /></Grid>
-                  <Grid item xs={12}><TextField label="Мощность, Вт" type="number" fullWidth value={form.power} onChange={(e) => set('power', e.target.value)} /></Grid>
-                  <Grid item xs={12}><TextField label="Напряжение, В" type="number" fullWidth value={form.voltage} onChange={(e) => set('voltage', e.target.value)} /></Grid>
-                  <Grid item xs={12}><TextField label="Световой поток, лм" type="number" fullWidth value={form.flux} onChange={(e) => set('flux', e.target.value)} /></Grid>
-                  <Grid item xs={12}><TextField label="Ресурс, часы" type="number" fullWidth value={form.lifespan} onChange={(e) => set('lifespan', e.target.value)} /></Grid>
-                  <Grid item xs={12}><TextField label="Вес, г" type="number" fullWidth value={form.weight} onChange={(e) => set('weight', e.target.value)} /></Grid>
+              {[['Цветовая температура, К', 'colorTemp'], ['Мощность, Вт', 'power'], ['Напряжение, В', 'voltage'],
+              ['Световой поток, лм', 'flux'], ['Ресурс, часы', 'lifespan'], ['Вес, г', 'weight']].map(([label, field]) => (
+                <Grid item xs={6} sm={4} key={field}>
+                  <TextField label={label} type="number" fullWidth value={form[field]} onChange={(e) => set(field, e.target.value)} />
                 </Grid>
-              </Grid>
-              <Grid item xs={4}>
-                <TextField label="Длина, см" type="number" fullWidth value={form.dimensions.l} onChange={(e) => setDim('l', e.target.value)} />
-              </Grid>
-              <Grid item xs={4}>
-                <TextField label="Ширина, см" type="number" fullWidth value={form.dimensions.w} onChange={(e) => setDim('w', e.target.value)} />
-              </Grid>
-              <Grid item xs={4}>
-                <TextField label="Высота, см" type="number" fullWidth value={form.dimensions.h} onChange={(e) => setDim('h', e.target.value)} />
-              </Grid>
+              ))}
+              <Grid item xs={4}><TextField label="Длина, см" type="number" fullWidth value={form.length} onChange={(e) => set('length', e.target.value)} /></Grid>
+              <Grid item xs={4}><TextField label="Ширина, см" type="number" fullWidth value={form.width} onChange={(e) => set('width', e.target.value)} /></Grid>
+              <Grid item xs={4}><TextField label="Высота, см" type="number" fullWidth value={form.height} onChange={(e) => set('height', e.target.value)} /></Grid>
             </Grid>
 
             <Divider sx={{ my: 3 }} />
@@ -186,13 +180,9 @@ export default function ProductEditPage() {
               <Button variant="outlined" startIcon={<RestartAltIcon />} onClick={handleReset}>
                 Сбросить
               </Button>
-              <Button
-                variant="contained"
-                startIcon={<SaveIcon />}
-                onClick={handleSave}
-                className={styles.saveBtn}
-              >
-                Сохранить изменения
+              <Button variant="contained" startIcon={<SaveIcon />} onClick={handleSave}
+                className={styles.saveBtn} disabled={saving}>
+                {saving ? 'Сохранение...' : 'Сохранить изменения'}
               </Button>
             </Box>
           </Paper>

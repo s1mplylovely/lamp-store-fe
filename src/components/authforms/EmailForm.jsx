@@ -1,18 +1,17 @@
 import { useState } from 'react';
-import { Box, TextField, Button } from '@mui/material';
-import { useApp } from '../../context/AppContext';
+import { Box, TextField, Button, CircularProgress } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+import { requestCode } from '../../store/actions/authActions';
 import styles from './style.module.css';
 
 export function EmailForm({ onSuccess }) {
+    const dispatch = useDispatch();
+    const { loading, error } = useSelector((s) => s.auth);
     const [email, setEmail] = useState('');
-    const [error, setError] = useState('');
 
-    const handleSubmit = () => {
-        if (!email.includes('@')) {
-            setError('E-mail не существует');
-            return;
-        }
-        setError('');
+    const handleSubmit = async () => {
+        if (!email.includes('@')) return;
+        await dispatch(requestCode(email, 'email'));
         onSuccess(email);
     };
 
@@ -23,13 +22,15 @@ export function EmailForm({ onSuccess }) {
                 type="email"
                 fullWidth
                 value={email}
-                onChange={(e) => { setEmail(e.target.value); setError(''); }}
+                onChange={(e) => setEmail(e.target.value)}
                 error={!!error}
-                helperText={error}
+                helperText={error || ''}
                 placeholder="example@mail.ru"
+                onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
             />
-            <Button variant="contained" fullWidth className={styles.btn} onClick={handleSubmit}>
-                Далее
+            <Button variant="contained" fullWidth className={styles.btn}
+                onClick={handleSubmit} disabled={loading || !email.includes('@')}>
+                {loading ? <CircularProgress size={22} color="inherit" /> : 'Далее'}
             </Button>
         </Box>
     );

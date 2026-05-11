@@ -568,15 +568,15 @@ export const CHART_DATA = [
 ];
 
 export const STATUS_COLORS = {
-  new: 'warning',
-  delivering: 'info',
-  delivered: 'success',
-  cancelled: 'error',
+  'новый': 'warning',
+  'в доставке': 'info',
+  'доставлен': 'success',
+  'отменен': 'error',
 };
 
 export const ORDER_STATUSES = {
-  new: 'новый',
-  delivering: 'в доставке',
-  delivered: 'доставлен',
-  cancelled: 'отменён',
+  'новый': 'Новый',
+  'в доставке': 'В доставке',
+  'доставлен': 'Доставлен',
+  'отменен': 'Отменён',
 };

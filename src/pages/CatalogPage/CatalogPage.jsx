@@ -1,13 +1,16 @@
-import { useState, useMemo } from 'react';
-import { Box, Typography, Button, Grid, Container, useMediaQuery, useTheme } from '@mui/material';
+import { useState, useEffect } from 'react';
+import {
+  Box, Typography, Button, Grid, Container, CircularProgress, useMediaQuery, useTheme, Alert
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchProducts } from '../../store/actions/productActions';
 import FilterSidebar from '../../components/catalog/FilterSidebar/FilterSidebar';
 import ProductCard from '../../components/catalog/ProductCard/ProductCard';
 import SearchBar from '../../components/ui/SearchBar/SearchBar';
 import EmptyState from '../../components/ui/EmptyState/EmptyState';
 import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined';
-import { useApp } from '../../context/AppContext';
 import styles from './CatalogPage.module.css';
 
 const defaultFilters = {
@@ -19,8 +22,10 @@ const defaultFilters = {
 };
 
 export default function CatalogPage() {
-  const { products, currentUser } = useApp();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((s) => s.auth.currentUser);
+  const { items: products, loading, error } = useSelector((s) => s.products);
   const isAdmin = currentUser?.isAdmin;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -28,26 +33,17 @@ export default function CatalogPage() {
   const [filters, setFilters] = useState(defaultFilters);
   const [search, setSearch] = useState('');
 
-  const filtered = useMemo(() => {
-    return products.filter((p) => {
-      if (!isAdmin && !p.visible) return false;
-
-      if (search) {
-        const q = search.toLowerCase();
-        if (!p.name.toLowerCase().includes(q) && !p.article.toLowerCase().includes(q)) return false;
-      }
-      if (filters.priceMin && p.price < Number(filters.priceMin)) return false;
-      if (filters.priceMax && p.price > Number(filters.priceMax)) return false;
-      if (filters.base.length && !filters.base.includes(p.base)) return false;
-      if (filters.color.length && !filters.color.includes(p.color)) return false;
-      if (filters.category.length && !filters.category.includes(p.category)) return false;
-      return true;
-    });
-  }, [products, filters, search, isAdmin]);
-
-  const handleAddNew = () => {
-    navigate('/catalog/new/edit');
-  };
+  useEffect(() => {
+    dispatch(fetchProducts({
+      search,
+      price_min: filters.priceMin || undefined,
+      price_max: filters.priceMax || undefined,
+      base: filters.base.length ? filters.base : undefined,
+      color: filters.color.length ? filters.color : undefined,
+      category: filters.category.length ? filters.category : undefined,
+      visible: isAdmin ? undefined : true,
+    }));
+  }, [dispatch, search, filters, isAdmin]);
 
   return (
     <Container maxWidth="xl" className={styles.root}>
@@ -64,7 +60,7 @@ export default function CatalogPage() {
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
-                onClick={handleAddNew}
+                onClick={() => navigate('/catalog/new/edit')}
                 className={styles.addBtn}
               >
                 Добавить товар
@@ -85,21 +81,32 @@ export default function CatalogPage() {
           </Box>
 
           {/* Товары или EmptyState */}
-          {filtered.length === 0 ? (
-            <EmptyState
-              icon={<LightbulbOutlinedIcon style={{ fontSize: 64 }} />}
-              title="Товары не найдены"
-              description="Попробуйте изменить параметры фильтрации или поискового запроса"
-            />
-          ) : (
-            <Grid container spacing={2}>
-              {filtered.map((p) => (
-                <Grid item key={p.id} xs={12} sm={6} md={4} lg={3}>
-                  <ProductCard product={p} />
-                </Grid>
-              ))}
-            </Grid>
-          )}
+          <Box className={styles.listArea}>
+            {loading && (
+              <Box sx={{ display: 'flex', justifyContent: 'center', pt: 8 }}>
+                <CircularProgress />
+              </Box>
+            )}
+            {!loading && error && (
+              <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>
+            )}
+            {!loading && !error && products.length === 0 && (
+              <EmptyState
+                icon={<LightbulbOutlinedIcon style={{ fontSize: 64 }} />}
+                title="Товары не найдены"
+                description="Попробуйте изменить параметры фильтрации или поискового запроса"
+              />
+            )}
+            {!loading && !error && products.length > 0 && (
+              <Grid container spacing={2}>
+                {products.map((p) => (
+                  <Grid item key={p.id} xs={12} sm={6} md={4} lg={3}>
+                    <ProductCard product={p} />
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+          </Box>
         </Box>
       </Box>
     </Container>

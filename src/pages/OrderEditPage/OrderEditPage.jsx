@@ -1,46 +1,57 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Container, Box, Typography, Paper, Grid, TextField, Button,
   FormControl, InputLabel, Select, MenuItem, RadioGroup,
   FormControlLabel, Radio, FormLabel, Divider, IconButton, Table,
-  TableHead, TableBody, TableRow, TableCell,
+  TableHead, TableBody, TableRow, TableCell, CircularProgress
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SaveIcon from '@mui/icons-material/Save';
 import QuantitySelector from '../../components/ui/QuantitySelector/QuantitySelector';
-import { useApp } from '../../context/AppContext';
+import { fetchOrder, updateOrder } from '../../store/actions/orderActions';
 import { ORDER_STATUSES } from '../../data/mockData';
-import DeleteProductDialog from '../../components/ui/DeleteDialog';
+import DeleteDialog from '../../components/ui/DeleteDialog';
 import styles from './OrderEditPage.module.css';
 
 export default function OrderEditPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { orders, updateOrder, currentUser } = useApp();
-  const [deleteIdx, setDeleteIdx] = useState(null);
+  const dispatch = useDispatch();
+  const currentUser = useSelector((s) => s.auth.currentUser);
+  const { current: order, loading, saving } = useSelector((s) => s.orders);
 
-  const order = orders.find((o) => o.id === id);
+  const [form, setForm] = useState(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [selectedIdx, setSelectedIdx] = useState(null);
 
-  const [form, setForm] = useState(order ? {
-    clientName: order.clientName,
-    clientPhone: order.clientPhone,
-    clientEmail: order.clientEmail,
-    address: order.address,
-    paymentMethod: order.paymentMethod,
-    status: order.status,
-    items: [...order.items],
-  } : null);
+  useEffect(() => {
+    dispatch(fetchOrder(id));
+  }, [dispatch, id]);
 
-  if (!currentUser?.isAdmin || !order || !form) {
-    return (
-      <Container sx={{ pt: 4 }}>
-        <Typography>Заказ не найден</Typography>
-        <Button component={Link} to="/admin/orders">Вернуться</Button>
-      </Container>
-    );
-  }
+  useEffect(() => {
+    if (order && order.id === id) {
+      setForm({
+        clientName: order.clientName,
+        clientPhone: order.clientPhone,
+        clientEmail: order.clientEmail,
+        address: order.address,
+        paymentMethod: order.paymentMethod,
+        status: order.status,
+        items: [...order.items],
+      });
+    }
+  }, [order, id]);
+
+  if (!currentUser?.isAdmin) return <Container><Typography>Нет доступа</Typography></Container>;
+
+  if (loading || !form) return (
+    <Container sx={{ pt: 6, display: 'flex', justifyContent: 'center' }}>
+      <CircularProgress />
+    </Container>
+  );
 
   const set = (f, v) => setForm((prev) => ({ ...prev, [f]: v }));
 
@@ -48,31 +59,25 @@ export default function OrderEditPage() {
     if (qty <= 0) {
       setForm((f) => ({ ...f, items: f.items.filter((_, i) => i !== idx) }));
     } else {
-      setForm((f) => ({
-        ...f,
-        items: f.items.map((item, i) => i === idx ? { ...item, qty } : item),
-      }));
+      setForm((f) => ({ ...f, items: f.items.map((item, i) => i === idx ? { ...item, qty } : item) }));
     }
   };
 
   const handleRemoveItem = (idx) => {
-    setForm((f) => ({ ...f, items: f.items.filter((_, i) => i !== idx) }));
+    setForm((f) => ({
+      ...f,
+      items: f.items.filter((_, i) => i !== idx),
+    }));
+    setDeleteOpen(false);
   };
 
   const total = form.items.reduce((s, i) => s + i.price * i.qty, 0);
 
-  const handleSave = () => {
-    updateOrder(id, { ...form, total });
+  const handleSave = async () => {
+    await dispatch(updateOrder(id, { ...form, total }));
     navigate('/admin/orders');
   };
 
-  const confirmRemoveItem = () => {
-    setForm((f) => ({
-      ...f,
-      items: f.items.filter((_, i) => i !== deleteIdx),
-    }));
-    setDeleteIdx(null);
-  };
 
   return (
     <Container maxWidth="md" className={styles.root}>
@@ -154,7 +159,14 @@ export default function OrderEditPage() {
                   </TableCell>
                   <TableCell align="right">{(item.price * item.qty).toLocaleString('ru')} ₽</TableCell>
                   <TableCell>
-                    <IconButton size="small" color="error" onClick={() => setDeleteIdx(idx)}>
+                    <IconButton
+                      size="small"
+                      color="error"
+                      onClick={() => {
+                        setSelectedIdx(idx);
+                        setDeleteOpen(true);
+                      }}
+                    >
                       <DeleteIcon fontSize="small" />
                     </IconButton>
                   </TableCell>
@@ -170,15 +182,16 @@ export default function OrderEditPage() {
 
         <Box className={styles.buttons}>
           <Button variant="outlined" component={Link} to="/admin/orders">Отмена</Button>
-          <Button variant="contained" startIcon={<SaveIcon />} className={styles.saveBtn} onClick={handleSave}>
-            Сохранить
+          <Button variant="contained" startIcon={<SaveIcon />} className={styles.saveBtn}
+            onClick={handleSave} disabled={saving}>
+            {saving ? 'Сохранение...' : 'Сохранить'}
           </Button>
         </Box>
       </Paper>
-      <DeleteProductDialog
-        open={deleteIdx !== null}
-        onClose={() => setDeleteIdx(null)}
-        onConfirm={confirmRemoveItem}
+      <DeleteDialog
+        open={deleteOpen}
+        onClose={() => setDeleteOpen(false)}
+        onConfirm={() => handleRemoveItem(selectedIdx)}
         entity="товар"
       />
     </Container>

@@ -5,12 +5,14 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import EditIcon from '@mui/icons-material/Edit';
 import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined';
 import { useNavigate } from 'react-router-dom';
-import { useApp } from '../../../context/AppContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { addToCart } from '../../../store/actions/cartActions';
 import styles from './ProductCard.module.css';
 
 export default function ProductCard({ product }) {
   const navigate = useNavigate();
-  const { currentUser, addToCart } = useApp();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((s) => s.auth.currentUser);
   const isAdmin = currentUser?.isAdmin;
 
   return (
@@ -75,7 +77,7 @@ export default function ProductCard({ product }) {
             variant="contained"
             size="small"
             startIcon={<AddShoppingCartIcon />}
-            onClick={() => addToCart(product)}
+            onClick={() => dispatch(addToCart(product))}
             disabled={product.stock === 0}
             className={styles.btn}
             fullWidth

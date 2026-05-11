@@ -2,14 +2,18 @@ import { Box, Container, Typography, Paper, Button, Divider, IconButton } from '
 import DeleteIcon from '@mui/icons-material/Delete';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import QuantitySelector from '../../components/ui/QuantitySelector/QuantitySelector';
 import EmptyState from '../../components/ui/EmptyState/EmptyState';
-import { useApp } from '../../context/AppContext';
+import { removeFromCart, updateCartQty } from '../../store/actions/cartActions';
 import styles from './CartPage.module.css';
 
 export default function CartPage() {
   const navigate = useNavigate();
-  const { cart, cartTotal, removeFromCart, updateCartQty, currentUser } = useApp();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((s) => s.auth.currentUser);
+  const cart = useSelector((s) => s.cart.items);
+  const cartTotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
 
   if (!currentUser) {
     navigate('/catalog');
@@ -48,13 +52,13 @@ export default function CartPage() {
                 <Box className={styles.itemControls}>
                   <QuantitySelector
                     value={item.qty}
-                    onIncrement={() => updateCartQty(item.productId, item.qty + 1)}
-                    onDecrement={() => updateCartQty(item.productId, item.qty - 1)}
+                    onIncrement={() => dispatch(updateCartQty(item.productId, item.qty + 1))}
+                    onDecrement={() => dispatch(updateCartQty(item.productId, item.qty - 1))}
                   />
                   <Typography variant="body1" className={styles.itemTotal}>
                     {(item.price * item.qty).toLocaleString('ru')} ₽
                   </Typography>
-                  <IconButton color="error" size="small" onClick={() => removeFromCart(item.productId)}>
+                  <IconButton color="error" size="small" onClick={() => dispatch(removeFromCart(item.productId))}>
                     <DeleteIcon />
                   </IconButton>
                 </Box>

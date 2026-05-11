@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
   Container, Box, Typography, Paper, TextField, Button, Divider,
   RadioGroup, FormControlLabel, Radio, FormLabel, Grid,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useApp } from '../../context/AppContext';
 import styles from './CheckoutPage.module.css';
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
-  const { currentUser, cart, cartTotal } = useApp();
+  const currentUser = useSelector((s) => s.auth.currentUser);
+  const cart = useSelector((s) => s.cart.items);
+  const cartTotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
 
   const [form, setForm] = useState({
     name: currentUser?.name || '',

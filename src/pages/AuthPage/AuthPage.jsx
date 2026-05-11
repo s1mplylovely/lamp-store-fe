@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box, Typography, Paper, Tabs, Tab, TextField, Button, Alert,
   InputAdornment, Container,
 } from '@mui/material';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import { useNavigate } from 'react-router-dom';
-import { useApp } from '../../context/AppContext';
+import { useSelector, useDispatch } from 'react-redux';
 import { EmailForm } from '../../components/authforms/EmailForm'
 import { PhoneForm } from '../../components/authforms/PhoneForm'
 import { CodeVerificationForm } from '../../components/authforms/CodeVerificationForm'
@@ -13,10 +13,16 @@ import styles from './AuthPage.module.css';
 
 export default function AuthPage() {
   const navigate = useNavigate();
-  const { login, loginAsCustomer, loginAsAdmin } = useApp();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((s) => s.auth.currentUser);
+
   const [tab, setTab] = useState(0);
-  const [step, setStep] = useState('form'); // form | code
+  const [step, setStep] = useState('form');   // 'form' | 'code'
   const [contact, setContact] = useState('');
+
+  useEffect(() => {
+    if (currentUser) navigate('/catalog');
+  }, [currentUser, navigate]);
 
   const handleTabChange = (_, val) => {
     setTab(val);
@@ -27,13 +33,6 @@ export default function AuthPage() {
   const handleSuccess = (value) => {
     setContact(value);
     setStep('code');
-  };
-
-  const handleVerified = (value) => {
-    const success = login(value);
-    if (success) {
-      navigate('/catalog');
-    }
   };
 
   return (
@@ -62,16 +61,10 @@ export default function AuthPage() {
           {/* Код */}
           {step === 'code' && (
             <Box className={styles.tabBody}>
-              <CodeVerificationForm contact={contact} onVerified={handleVerified} />
-              {/* Назад */}
-              <Button
-                variant="text"
-                onClick={() => setStep('form')}
-                fullWidth
-                sx={{ mt: 1 }}
-              >
-                ← Изменить {tab === 0 ? 'телефон' : 'e-mail'}
-              </Button>
+              <CodeVerificationForm
+                contact={contact}
+                onBack={() => { setStep('form'); setContact(''); }}
+              />
             </Box>
           )}
         </Paper>

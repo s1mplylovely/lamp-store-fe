@@ -27,7 +27,7 @@ npm run dev
 
 ## Данные для входа
 
-| Роль | e-mail | Проверочный код |
+| Роль | e-mail |
 |---|---|---|
-| Админ | admin@lampstore.ru | 1234 |
-| Клиент | client@mail.ru | 1234 |
+| Админ | admin@example.com |
+| Клиент | client@example.com |

@@ -1,66 +1,78 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Box, Container, Typography, Button, Chip, Divider, Table, TableBody,
   TableRow, TableCell, Switch, FormControlLabel, Dialog, DialogTitle,
-  DialogContent, DialogActions, Paper, Grid,
+  DialogContent, DialogActions, Paper, Grid, CircularProgress, Alert
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined';
-import { useApp } from '../../context/AppContext';
+import { fetchProduct, deleteProduct, patchProductVisibility } from '../../store/actions/productActions';
+import { addToCart } from '../../store/actions/cartActions';
 import DeleteDialog from '../../components/ui/DeleteDialog';
 import styles from './ProductPage.module.css';
 
 export default function ProductPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { products, currentUser, addToCart, deleteProduct, updateProduct } = useApp();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((s) => s.auth.currentUser);
+  const { current: product, loading, error } = useSelector((s) => s.products);
   const isAdmin = currentUser?.isAdmin;
 
   const [filters, setFilters] = useState({});
   const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const product = products.find((p) => p.id === Number(id));
+  useEffect(() => {
+    dispatch(fetchProduct(id));
+  }, [dispatch, id]);
 
-  if (!product) {
-    return (
-      <Container maxWidth="xl" sx={{ pt: 4 }}>
-        <Typography>Товар не найден.</Typography>
-        <Button component={Link} to="/catalog" startIcon={<ArrowBackIcon />}>
-          Вернуться в каталог
-        </Button>
-      </Container>
-    );
-  }
-
-  const handleDelete = () => {
-    deleteProduct(product.id);
+  const handleDelete = async () => {
+    await dispatch(deleteProduct(product.id));
     setDeleteOpen(false);
     navigate('/catalog');
   };
 
-  const handleVisibilityToggle = () => {
-    updateProduct(product.id, { visible: !product.visible });
-  };
-
-  const specs = [
-    { label: 'Категория', value: product.category },
-    { label: 'Тип цоколя', value: product.base },
-    { label: 'Цвет', value: product.color },
+  const specs = product ? [
+    { label: 'Категория', value: product.category ?? '—' },
+    { label: 'Тип цоколя', value: product.base ?? '—' },
+    { label: 'Цвет', value: product.color ?? '—' },
     { label: 'Цветовая температура, К', value: product.colorTemp ?? '—' },
-    { label: 'Мощность, Вт', value: product.power },
-    { label: 'Напряжение, В', value: product.voltage },
-    { label: 'Световой поток, лм', value: product.flux },
-    { label: 'Ресурс, часы', value: product.lifespan.toLocaleString('ru') },
-    { label: 'Вес, г', value: product.weight },
+    { label: 'Мощность, Вт', value: product.power ?? '—' },
+    { label: 'Напряжение, В', value: product.voltage ?? '—' },
+    { label: 'Световой поток, лм', value: product.flux ?? '—' },
+    {
+      label: 'Ресурс, часы',
+      value: product.lifespan?.toLocaleString('ru') ?? '—'
+    },
+    { label: 'Вес, г', value: product.weight ?? '—' },
     {
       label: 'Габаритные размеры упаковки, см',
-      value: `${product.dimensions.l} × ${product.dimensions.w} × ${product.dimensions.h}`,
+      value:
+        product.length && product.width && product.height
+          ? `${product.length} × ${product.width} × ${product.height}`
+          : '—'
     },
-  ];
+  ] : [];
+
+  if (loading) return (
+    <Container maxWidth="xl" sx={{ pt: 6, display: 'flex', justifyContent: 'center' }}>
+      <CircularProgress />
+    </Container>
+  );
+
+  if (error || !product) return (
+    <Container maxWidth="xl" sx={{ pt: 4 }}>
+      <Alert severity="error" sx={{ mb: 2 }}>{error || 'Товар не найден'}</Alert>
+      <Button component={Link} to="/catalog" startIcon={<ArrowBackIcon />}>
+        Вернуться в каталог
+      </Button>
+    </Container>
+  );
 
   return (
     <Container maxWidth="xl" className={styles.root}>
@@ -107,7 +119,7 @@ export default function ProductPage() {
                   control={
                     <Switch
                       checked={product.visible}
-                      onChange={handleVisibilityToggle}
+                      onChange={() => dispatch(patchProductVisibility(product.id, !product.visible))}
                     />
                   }
                   label={product.visible ? 'Видимый на витрине' : 'Скрыт с витрины'}
@@ -141,7 +153,7 @@ export default function ProductPage() {
                     variant="contained"
                     size="large"
                     startIcon={<AddShoppingCartIcon />}
-                    onClick={() => addToCart(product)}
+                    onClick={() => dispatch(addToCart(product))}
                     disabled={product.stock === 0}
                     className={styles.cartBtn}
                   >

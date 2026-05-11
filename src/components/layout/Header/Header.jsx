@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   AppBar, Toolbar, IconButton, Badge, Typography, Box, Button, Divider,
   Drawer, List, ListItem, ListItemIcon, ListItemText, useMediaQuery, useTheme,
@@ -13,15 +14,19 @@ import PeopleIcon from '@mui/icons-material/People';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import { useApp } from '../../../context/AppContext';
+import { logout } from '../../../store/actions/authActions';
+import { openAuthModal } from '../../../store/actions/uiActions';
 import styles from './Header.module.css';
 
 export default function Header() {
   const navigate = useNavigate();
-  const { currentUser, cartCount, logout, openAuthModal } = useApp();
+  const dispatch = useDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const currentUser = useSelector((s) => s.auth.currentUser);
+  const cartCount = useSelector((s) => s.cart.items.reduce((n, i) => n + i.qty, 0));
 
   const isAdmin = currentUser?.isAdmin;
   const isAuth = !!currentUser;
@@ -29,7 +34,7 @@ export default function Header() {
   const handleCartClick = () => {
     setDrawerOpen(false);
     if (!isAuth) {
-      openAuthModal('Авторизуйтесь, чтобы добавить товары в корзину');
+      dispatch(openAuthModal('Авторизуйтесь, чтобы добавить товары в корзину'));
     } else {
       navigate('/cart');
     }
@@ -38,7 +43,7 @@ export default function Header() {
   const handleDashboardClick = () => {
     setDrawerOpen(false);
     if (!isAuth) {
-      openAuthModal('Авторизуйтесь, чтобы начать покупки');
+      dispatch(openAuthModal('Авторизуйтесь, чтобы начать покупки'));
     } else {
       navigate('/dashboard');
     }
@@ -46,7 +51,7 @@ export default function Header() {
 
   const handleLogout = () => {
     setDrawerOpen(false);
-    logout();
+    dispatch(logout());
   };
 
   const mobileDrawer = (
@@ -220,7 +225,7 @@ export default function Header() {
                 <Button
                   color="inherit"
                   startIcon={<LogoutIcon />}
-                  onClick={logout}
+                  onClick={handleLogout}
                 >
                   Выйти
                 </Button>

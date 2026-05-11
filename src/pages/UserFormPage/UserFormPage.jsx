@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Container, Typography, Paper, Box, TextField, Button,
-  FormControlLabel, Switch, Divider, Grid,
+  FormControlLabel, Switch, Divider, Grid, CircularProgress
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SaveIcon from '@mui/icons-material/Save';
-import { useApp } from '../../context/AppContext';
+import { fetchUser, createUser, updateUser } from '../../store/actions/userActions';
 import styles from './UserFormPage.module.css';
 
 const emptyUser = {
@@ -20,25 +21,35 @@ const emptyUser = {
 export default function UserFormPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { users, addUser, updateUser, currentUser } = useApp();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((s) => s.auth.currentUser);
+  const { current: existing, loading, saving } = useSelector((s) => s.users);
 
   const isNew = !id;
-  const existing = isNew ? null : users.find((u) => u.id === Number(id));
+  const [form, setForm] = useState(emptyUser);
 
-  const [form, setForm] = useState(existing ? { ...existing } : emptyUser);
+  useEffect(() => {
+    if (!isNew) dispatch(fetchUser(id));
+  }, [dispatch, id, isNew]);
 
-  if (!currentUser?.isAdmin) {
-    navigate('/catalog');
-    return null;
-  }
+  useEffect(() => {
+    if (!isNew && existing) setForm({ ...existing });
+  }, [existing, isNew]);
+
+  if (!currentUser?.isAdmin) { navigate('/catalog'); return null; }
+  if (!isNew && loading) return (
+    <Container sx={{ pt: 6, display: 'flex', justifyContent: 'center' }}>
+      <CircularProgress />
+    </Container>
+  );
 
   const set = (field, value) => setForm((f) => ({ ...f, [field]: value }));
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (isNew) {
-      addUser(form);
+      await dispatch(createUser(form));
     } else {
-      updateUser(existing.id, form);
+      await dispatch(updateUser(id, form));
     }
     navigate('/admin/users');
   };
@@ -116,13 +127,9 @@ export default function UserFormPage() {
           <Button variant="outlined" component={Link} to="/admin/users">
             Не сохранять и вернуться
           </Button>
-          <Button
-            variant="contained"
-            startIcon={<SaveIcon />}
-            className={styles.saveBtn}
-            onClick={handleSave}
-          >
-            Сохранить
+          <Button variant="contained" startIcon={<SaveIcon />}
+            className={styles.saveBtn} onClick={handleSave} disabled={saving}>
+            {saving ? 'Сохранение...' : 'Сохранить'}
           </Button>
         </Box>
       </Paper>
