@@ -13,7 +13,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import SearchBar from '../../components/ui/SearchBar/SearchBar';
 import { fetchOrders, deleteOrder } from '../../store/actions/orderActions';
 import { fetchUsers } from '../../store/actions/userActions';
-import { ORDER_STATUSES, STATUS_COLORS } from '../../data/mockData';
+import { ORDER_STATUSES, STATUS_COLORS } from '../../data/common';
 import { OrderDetailRow } from '../../components/admin/OrderDetailRow/OrderDetailRow';
 import OrdersFilterSidebar from '../../components/admin/OrdersFilterSidebar/OrdersFilterSidebar';
 import DeleteDialog from '../../components/ui/DeleteDialog';

@@ -83,3 +83,10 @@
   background: var(--dark) !important;
   font-size: 12px !important;
 }
+
+.productImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}

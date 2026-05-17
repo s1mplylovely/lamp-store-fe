@@ -8,7 +8,7 @@ import {
     MenuItem,
     TextField,
 } from '@mui/material';
-import { ORDER_STATUSES } from '../../../data/mockData';
+import { ORDER_STATUSES } from '../../../data/common';
 
 export default function OrdersFilterSidebar({
     filterStatus,
@@ -35,19 +35,6 @@ export default function OrdersFilterSidebar({
                             {label}
                         </MenuItem>
                     ))}
-                </Select>
-            </FormControl>
-
-            <FormControl fullWidth size="small" sx={{ mb: 2 }}>
-                <InputLabel>Способ оплаты</InputLabel>
-                <Select
-                    label="Способ оплаты"
-                    value={filterPayment}
-                    onChange={(e) => setFilterPayment(e.target.value)}
-                >
-                    <MenuItem value="">Все</MenuItem>
-                    <MenuItem value="card">Банковская карта</MenuItem>
-                    <MenuItem value="cash">Наличные</MenuItem>
                 </Select>
             </FormControl>
 

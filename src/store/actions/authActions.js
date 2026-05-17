@@ -1,6 +1,5 @@
 import { apiFetch, USER_API } from '../api';
 
-// ── Action type constants ─────────────────────────────────────────────────────
 export const SIGNUP_REQUEST = 'auth/SIGNUP_REQUEST';
 export const SIGNUP_SUCCESS = 'auth/SIGNUP_SUCCESS';
 export const SIGNUP_FAILURE = 'auth/SIGNUP_FAILURE';
@@ -15,8 +14,28 @@ export const FETCH_ME_FAILURE = 'auth/FETCH_ME_FAILURE';
 
 export const LOGOUT = 'auth/LOGOUT';
 
-// POST /auth/signup    /auth/signin
-export const signup = ({ email, phone }) => async (dispatch) => {
+// POST /auth/signup
+export const register = ({ email, phone }) => async (dispatch) => {
+  dispatch({ type: SIGNUP_REQUEST });
+  try {
+    await apiFetch(USER_API, '/auth/signup', {
+      method: 'POST',
+      body: JSON.stringify({ email: email || null, phone: phone || null }),
+    });
+    const data = await apiFetch(USER_API, '/auth/signin', {
+      method: 'POST',
+      body: JSON.stringify({ email: email || null, phone: phone || null }),
+    });
+    dispatch({ type: SIGNUP_SUCCESS, payload: data });
+    return data;
+  } catch (err) {
+    dispatch({ type: SIGNUP_FAILURE, payload: err.message });
+    return null;
+  }
+};
+
+// POST /auth/signin
+export const signin = ({ email, phone }) => async (dispatch) => {
   dispatch({ type: SIGNUP_REQUEST });
   try {
     const data = await apiFetch(USER_API, '/auth/signin', {
@@ -48,6 +67,7 @@ export const verifyCode = (firstArg, secondArg) => async (dispatch, getState) =>
       method: 'POST',
       body: JSON.stringify({ uuid, role, code }),
     });
+
     if (data?.token) {
       localStorage.setItem('token', data.token);
     }

@@ -29,6 +29,10 @@ export const PAY_ORDER_REQUEST = 'orders/PAY_REQUEST';
 export const PAY_ORDER_SUCCESS = 'orders/PAY_SUCCESS';
 export const PAY_ORDER_FAILURE = 'orders/PAY_FAILURE';
 
+export const FETCH_STATISTICS_REQUEST = 'orders/FETCH_STATISTICS_REQUEST';
+export const FETCH_STATISTICS_SUCCESS = 'orders/FETCH_STATISTICS_SUCCESS';
+export const FETCH_STATISTICS_FAILURE = 'orders/FETCH_STATISTICS_FAILURE';
+
 
 function buildQuery(params) {
   const qs = new URLSearchParams();
@@ -189,5 +193,16 @@ export const patchOrderStatus = (id, status) => async (dispatch) => {
   } catch (err) {
     dispatch({ type: UPDATE_ORDER_FAILURE, payload: err.message });
     return null;
+  }
+};
+
+// GET /orders/statistics (админ)
+export const fetchStatistics = () => async (dispatch) => {
+  dispatch({ type: FETCH_STATISTICS_REQUEST });
+  try {
+    const data = await apiFetch(ORDER_API, '/orders/statistics');
+    dispatch({ type: FETCH_STATISTICS_SUCCESS, payload: data });
+  } catch (err) {
+    dispatch({ type: FETCH_STATISTICS_FAILURE, payload: err.message });
   }
 };

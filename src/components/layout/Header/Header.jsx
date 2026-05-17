@@ -117,7 +117,7 @@ export default function Header() {
 
         <ListItem button onClick={handleDashboardClick} className={styles.drawerItem}>
           <ListItemIcon><PersonIcon className={styles.icon} /></ListItemIcon>
-          <ListItemText primary={isAuth ? 'Личный кабинет' : 'Войти'} />
+          <ListItemText primary={'Личный кабинет'} />
         </ListItem>
 
         {isAuth && (

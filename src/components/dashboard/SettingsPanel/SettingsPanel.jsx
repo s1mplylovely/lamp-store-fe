@@ -8,6 +8,7 @@ export function SettingsPanel({ user }) {
     const dispatch = useDispatch();
     const currentUser = useSelector((s) => s.auth.currentUser);
     const { loading } = useSelector((s) => s.auth);
+    const [saveStatus, setSaveStatus] = useState('Сохранить');
 
     const [form, setForm] = useState({
         name: currentUser?.name || '',
@@ -22,6 +23,11 @@ export function SettingsPanel({ user }) {
             email: form.email,
             phone: form.phone,
         }));
+        setSaveStatus('Сохранено');
+        setTimeout(() => {
+            saving = true;
+            setSaveStatus('Сохранить');
+        }, 2000);
     };
 
     return (
@@ -30,7 +36,7 @@ export function SettingsPanel({ user }) {
             <TextField label="E-mail" fullWidth value={form.email} onChange={(e) => set('email', e.target.value)} />
             <TextField label="Телефон" fullWidth value={form.phone} onChange={(e) => set('phone', e.target.value)} />
             <Button variant="contained" className={styles.saveBtn} onClick={handleSave} disabled={loading}>
-                {loading ? 'Сохранение...' : 'Сохранить'}
+                {loading ? 'Сохранение...' : saveStatus}
             </Button>
         </Box>
     );

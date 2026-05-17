@@ -7,6 +7,7 @@ import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../../../store/actions/cartActions';
+import { openAuthModal } from '../../../store/actions/uiActions';
 import styles from './ProductCard.module.css';
 
 export default function ProductCard({ product }) {
@@ -14,12 +15,23 @@ export default function ProductCard({ product }) {
   const dispatch = useDispatch();
   const currentUser = useSelector((s) => s.auth.currentUser);
   const isAdmin = currentUser?.isAdmin;
+  const isAuth = !!currentUser;
+
+  const handleCartClick = () => {
+    if (!isAuth) {
+      dispatch(openAuthModal('Авторизуйтесь, чтобы добавить товары в корзину'));
+    } else {
+      dispatch(addToCart(product));
+    }
+  };
 
   return (
     <Card className={styles.card} elevation={1}>
 
       <Box className={styles.imageArea} onClick={() => navigate(`/catalog/${product.id}`)}>
-        <LightbulbOutlinedIcon className={styles.productIcon} />
+        {product.image ? (
+          <img src={product.image} alt={product.name} class={styles.productImg} loading="lazy"></img>
+        ) : <LightbulbOutlinedIcon className={styles.productIcon} />}
         {!product.visible && (
           <Chip label="Скрыт" size="small" className={styles.hiddenChip} />
         )}
@@ -77,7 +89,7 @@ export default function ProductCard({ product }) {
             variant="contained"
             size="small"
             startIcon={<AddShoppingCartIcon />}
-            onClick={() => dispatch(addToCart(product))}
+            onClick={handleCartClick}
             disabled={product.stock === 0}
             className={styles.btn}
             fullWidth

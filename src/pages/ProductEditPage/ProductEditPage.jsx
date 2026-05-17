@@ -159,10 +159,7 @@ export default function ProductEditPage() {
             <Divider sx={{ my: 3 }} />
             <Typography variant="h6" className={styles.sectionTitle}>Фото товара</Typography>
             <Box className={styles.photoUpload}>
-              <Button variant="outlined">Загрузить фото</Button>
-              <Typography variant="caption" color="text.secondary">
-                Форматы: JPG, PNG. Макс. размер: 5 МБ
-              </Typography>
+              <TextField label="URL фото" fullWidth value={form.image} onChange={(e) => set('image', e.target.value)} />
             </Box>
 
             <Divider sx={{ my: 3 }} />

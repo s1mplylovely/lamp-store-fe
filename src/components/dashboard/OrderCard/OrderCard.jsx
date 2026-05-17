@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ReplayIcon from '@mui/icons-material/Replay';
-import { ORDER_STATUSES, STATUS_COLORS } from '../../../data/mockData';
+import { ORDER_STATUSES, STATUS_COLORS } from '../../../data/common';
 import { fetchOrderItems } from '../../../store/actions/orderActions';
 import { addToCart } from '../../../store/actions/cartActions';
 import styles from './OrderCard.module.css';

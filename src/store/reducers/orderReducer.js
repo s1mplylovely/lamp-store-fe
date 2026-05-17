@@ -21,6 +21,9 @@ import {
   PAY_ORDER_SUCCESS,
   PAY_ORDER_FAILURE,
   ORDER_ITEMS_LOADED,
+  FETCH_STATISTICS_REQUEST,
+  FETCH_STATISTICS_SUCCESS,
+  FETCH_STATISTICS_FAILURE,
 } from '../actions/orderActions';
 
 const initialState = {
@@ -33,6 +36,9 @@ const initialState = {
   error: null,
   payStatus: null,  // null | 'success' | 'error'
   payError: null,
+  statistics: null,
+  statisticsLoading: false,
+  statisticsError: null,
 };
 
 export function mapOrder(o) {
@@ -163,6 +169,16 @@ export default function orderReducer(state = initialState, action) {
         current: state.current?.id === orderId ? { ...state.current, items } : state.current,
       };
     }
+
+    // Статистика
+    case FETCH_STATISTICS_REQUEST:
+      return { ...state, statisticsLoading: true, statisticsError: null };
+
+    case FETCH_STATISTICS_SUCCESS:
+      return { ...state, statisticsLoading: false, statistics: action.payload };
+
+    case FETCH_STATISTICS_FAILURE:
+      return { ...state, statisticsLoading: false, statisticsError: action.payload };
 
     default:
       return state;

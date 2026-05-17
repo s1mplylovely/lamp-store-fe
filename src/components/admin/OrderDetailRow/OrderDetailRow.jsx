@@ -4,7 +4,7 @@ import {
     Box, Typography, Table, TableHead, TableBody, TableRow,
     TableCell, Grid, CircularProgress,
 } from '@mui/material';
-import { ORDER_STATUSES } from '../../../data/mockData';
+import { ORDER_STATUSES } from '../../../data/common';
 import { fetchOrderItems } from '../../../store/actions/orderActions';
 import styles from './OrderDetailRow.module.css';
 

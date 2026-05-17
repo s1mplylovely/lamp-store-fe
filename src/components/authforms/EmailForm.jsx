@@ -1,18 +1,29 @@
 import { useState } from 'react';
-import { Box, TextField, Button, CircularProgress } from '@mui/material';
+import { Box, TextField, Button, CircularProgress, Stack } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { requestCode } from '../../store/actions/authActions';
+import { requestCode, register } from '../../store/actions/authActions';
 import styles from './style.module.css';
 
 export function EmailForm({ onSuccess }) {
     const dispatch = useDispatch();
     const { loading, error } = useSelector((s) => s.auth);
     const [email, setEmail] = useState('');
+    const [action, setAction] = useState(null); // 'signin' | 'signup'
 
-    const handleSubmit = async () => {
-        if (!email.includes('@')) return;
-        await dispatch(requestCode(email, 'email'));
-        onSuccess(email);
+    const isValid = email.includes('@') && email.includes('.');
+
+    const handleSignin = async () => {
+        if (!isValid) return;
+        setAction('signin');
+        const result = await dispatch(requestCode(email, 'email'));
+        if (result) onSuccess(email);
+    };
+
+    const handleSignup = async () => {
+        if (!isValid) return;
+        setAction('signup');
+        const result = await dispatch(register({ email }));
+        if (result) onSuccess(email);
     };
 
     return (
@@ -26,12 +37,32 @@ export function EmailForm({ onSuccess }) {
                 error={!!error}
                 helperText={error || ''}
                 placeholder="example@mail.ru"
-                onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                onKeyDown={(e) => e.key === 'Enter' && handleSignin()}
             />
-            <Button variant="contained" fullWidth className={styles.btn}
-                onClick={handleSubmit} disabled={loading || !email.includes('@')}>
-                {loading ? <CircularProgress size={22} color="inherit" /> : 'Далее'}
-            </Button>
+            <Stack spacing={1}>
+                <Button
+                    variant="contained"
+                    fullWidth
+                    className={styles.btn}
+                    onClick={handleSignin}
+                    disabled={loading}
+                >
+                    {loading && action === 'signin'
+                        ? <CircularProgress size={22} color="inherit" />
+                        : 'Войти'}
+                </Button>
+                <Button
+                    variant="contained"
+                    fullWidth
+                    className={styles.btn}
+                    onClick={handleSignup}
+                    disabled={loading}
+                >
+                    {loading && action === 'signup'
+                        ? <CircularProgress size={22} color="inherit" />
+                        : 'Зарегистрироваться'}
+                </Button>
+            </Stack>
         </Box>
     );
 }

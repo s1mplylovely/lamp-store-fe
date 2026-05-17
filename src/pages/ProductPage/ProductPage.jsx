@@ -13,6 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined';
 import { fetchProduct, deleteProduct, patchProductVisibility } from '../../store/actions/productActions';
 import { addToCart } from '../../store/actions/cartActions';
+import { openAuthModal } from '../../store/actions/uiActions';
 import DeleteDialog from '../../components/ui/DeleteDialog';
 import styles from './ProductPage.module.css';
 
@@ -23,6 +24,7 @@ export default function ProductPage() {
   const currentUser = useSelector((s) => s.auth.currentUser);
   const { current: product, loading, error } = useSelector((s) => s.products);
   const isAdmin = currentUser?.isAdmin;
+  const isAuth = !!currentUser;
 
   const [filters, setFilters] = useState({});
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -35,6 +37,14 @@ export default function ProductPage() {
     await dispatch(deleteProduct(product.id));
     setDeleteOpen(false);
     navigate('/catalog');
+  };
+
+  const handleCartClick = () => {
+    if (!isAuth) {
+      dispatch(openAuthModal('Авторизуйтесь, чтобы добавить товары в корзину'));
+    } else {
+      dispatch(addToCart(product));
+    }
   };
 
   const specs = product ? [
@@ -92,7 +102,9 @@ export default function ProductPage() {
             {/* Картинка */}
             <Grid item xs={12} md={4}>
               <Paper className={styles.imageBox} elevation={1}>
-                <LightbulbOutlinedIcon className={styles.productIcon} />
+                {product.image ? (
+                  <img src={product.image} alt={product.name} class={styles.productImg} loading="lazy"></img>
+                ) : <LightbulbOutlinedIcon className={styles.productIcon} />}
                 {!product.visible && (
                   <Chip label="Скрыт с витрины" color="warning" className={styles.hiddenChip} />
                 )}
@@ -153,7 +165,7 @@ export default function ProductPage() {
                     variant="contained"
                     size="large"
                     startIcon={<AddShoppingCartIcon />}
-                    onClick={() => dispatch(addToCart(product))}
+                    onClick={handleCartClick}
                     disabled={product.stock === 0}
                     className={styles.cartBtn}
                   >
