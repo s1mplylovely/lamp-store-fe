@@ -1,6 +1,4 @@
-export const PRODUCT_API = 'http://localhost:8001/api/v1';
-export const ORDER_API = 'http://localhost:8002/api/v1';
-export const USER_API = 'http://localhost:8003/api/v1';
+export const API = 'http://localhost:8000/api/v1';
 
 const getToken = () => localStorage.getItem('token');
 

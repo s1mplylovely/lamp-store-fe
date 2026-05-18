@@ -1,4 +1,4 @@
-import { apiFetch, USER_API } from '../api';
+import { apiFetch, API } from '../api';
 
 export const SIGNUP_REQUEST = 'auth/SIGNUP_REQUEST';
 export const SIGNUP_SUCCESS = 'auth/SIGNUP_SUCCESS';
@@ -18,11 +18,11 @@ export const LOGOUT = 'auth/LOGOUT';
 export const register = ({ email, phone }) => async (dispatch) => {
   dispatch({ type: SIGNUP_REQUEST });
   try {
-    await apiFetch(USER_API, '/auth/signup', {
+    await apiFetch(API, '/auth/signup', {
       method: 'POST',
       body: JSON.stringify({ email: email || null, phone: phone || null }),
     });
-    const data = await apiFetch(USER_API, '/auth/signin', {
+    const data = await apiFetch(API, '/auth/signin', {
       method: 'POST',
       body: JSON.stringify({ email: email || null, phone: phone || null }),
     });
@@ -38,7 +38,7 @@ export const register = ({ email, phone }) => async (dispatch) => {
 export const signin = ({ email, phone }) => async (dispatch) => {
   dispatch({ type: SIGNUP_REQUEST });
   try {
-    const data = await apiFetch(USER_API, '/auth/signin', {
+    const data = await apiFetch(API, '/auth/signin', {
       method: 'POST',
       body: JSON.stringify({ email: email || null, phone: phone || null }),
     });
@@ -63,7 +63,7 @@ export const verifyCode = (firstArg, secondArg) => async (dispatch, getState) =>
 
   dispatch({ type: VERIFY_CODE_REQUEST });
   try {
-    const data = await apiFetch(USER_API, '/auth/verify-code', {
+    const data = await apiFetch(API, '/auth/verify-code', {
       method: 'POST',
       body: JSON.stringify({ uuid, role, code }),
     });
@@ -87,7 +87,7 @@ export const fetchMe = () => async (dispatch) => {
 
   dispatch({ type: FETCH_ME_REQUEST });
   try {
-    const data = await apiFetch(USER_API, '/users/me');
+    const data = await apiFetch(API, '/users/me');
     dispatch({ type: FETCH_ME_SUCCESS, payload: data });
     return data;
   } catch {
@@ -105,7 +105,7 @@ export const requestCode = (contact, type) => async (dispatch) => {
       ? { email: contact, phone: null }
       : { email: null, phone: contact };
 
-    const data = await apiFetch(USER_API, '/auth/signin', {
+    const data = await apiFetch(API, '/auth/signin', {
       method: 'POST',
       body: JSON.stringify(body),
     });
@@ -124,7 +124,7 @@ export const updateProfile = (form) => async (dispatch, getState) => {
     const me = getState().auth.currentUser;
     if (!me) throw new Error('Not authenticated');
 
-    const data = await apiFetch(USER_API, `/users/${me.id}`, {
+    const data = await apiFetch(API, `/users/${me.id}`, {
       method: 'PATCH',
       body: JSON.stringify({
         name: form.name || null,

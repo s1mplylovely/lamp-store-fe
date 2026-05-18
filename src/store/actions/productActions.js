@@ -1,4 +1,4 @@
-import { apiFetch, PRODUCT_API } from '../api';
+import { apiFetch, API } from '../api';
 
 export const FETCH_PRODUCTS_REQUEST = 'products/FETCH_ALL_REQUEST';
 export const FETCH_PRODUCTS_SUCCESS = 'products/FETCH_ALL_SUCCESS';
@@ -74,7 +74,7 @@ export const fetchProducts = (filters = {}) => async (dispatch) => {
       skip: filters.skip,
       limit: filters.limit,
     });
-    const data = await apiFetch(PRODUCT_API, `/products/${query}`);
+    const data = await apiFetch(API, `/products/${query}`);
     dispatch({ type: FETCH_PRODUCTS_SUCCESS, payload: data });
   } catch (err) {
     dispatch({ type: FETCH_PRODUCTS_FAILURE, payload: err.message });
@@ -85,7 +85,7 @@ export const fetchProducts = (filters = {}) => async (dispatch) => {
 export const fetchProduct = (id) => async (dispatch) => {
   dispatch({ type: FETCH_PRODUCT_REQUEST });
   try {
-    const data = await apiFetch(PRODUCT_API, `/products/${id}`);
+    const data = await apiFetch(API, `/products/${id}`);
     dispatch({ type: FETCH_PRODUCT_SUCCESS, payload: data });
   } catch (err) {
     dispatch({ type: FETCH_PRODUCT_FAILURE, payload: err.message });
@@ -96,7 +96,7 @@ export const fetchProduct = (id) => async (dispatch) => {
 export const createProduct = (form) => async (dispatch) => {
   dispatch({ type: CREATE_PRODUCT_REQUEST });
   try {
-    const data = await apiFetch(PRODUCT_API, '/products/', {
+    const data = await apiFetch(API, '/products/', {
       method: 'POST',
       body: JSON.stringify(toApiBody(form)),
     });
@@ -112,7 +112,7 @@ export const createProduct = (form) => async (dispatch) => {
 export const updateProduct = (id, form) => async (dispatch) => {
   dispatch({ type: UPDATE_PRODUCT_REQUEST });
   try {
-    const data = await apiFetch(PRODUCT_API, `/products/${id}`, {
+    const data = await apiFetch(API, `/products/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(toApiBody(form)),
     });
@@ -128,7 +128,7 @@ export const updateProduct = (id, form) => async (dispatch) => {
 export const patchProductVisibility = (id, isVisible) => async (dispatch) => {
   dispatch({ type: UPDATE_PRODUCT_REQUEST });
   try {
-    const data = await apiFetch(PRODUCT_API, `/products/${id}`, {
+    const data = await apiFetch(API, `/products/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ is_visible: isVisible }),
     });
@@ -144,7 +144,7 @@ export const patchProductVisibility = (id, isVisible) => async (dispatch) => {
 export const deleteProduct = (id) => async (dispatch) => {
   dispatch({ type: DELETE_PRODUCT_REQUEST });
   try {
-    await apiFetch(PRODUCT_API, `/products/${id}`, { method: 'DELETE' });
+    await apiFetch(API, `/products/${id}`, { method: 'DELETE' });
     dispatch({ type: DELETE_PRODUCT_SUCCESS, payload: id });
     return true;
   } catch (err) {

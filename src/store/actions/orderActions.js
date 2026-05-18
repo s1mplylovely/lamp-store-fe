@@ -1,4 +1,4 @@
-import { apiFetch, ORDER_API } from '../api';
+import { apiFetch, API } from '../api';
 import { clearCart } from './cartActions';
 
 export const FETCH_ORDERS_REQUEST = 'orders/FETCH_ALL_REQUEST';
@@ -56,7 +56,7 @@ export const fetchOrders = (filters = {}) => async (dispatch) => {
       skip: filters.skip,
       limit: filters.limit,
     });
-    const data = await apiFetch(ORDER_API, `/orders/${query}`);
+    const data = await apiFetch(API, `/orders/${query}`);
     dispatch({ type: FETCH_ORDERS_SUCCESS, payload: data });
   } catch (err) {
     dispatch({ type: FETCH_ORDERS_FAILURE, payload: err.message });
@@ -67,7 +67,7 @@ export const fetchOrders = (filters = {}) => async (dispatch) => {
 export const fetchMyOrders = () => async (dispatch) => {
   dispatch({ type: FETCH_MY_ORDERS_REQUEST });
   try {
-    const data = await apiFetch(ORDER_API, '/orders/my');
+    const data = await apiFetch(API, '/orders/my');
     dispatch({ type: FETCH_MY_ORDERS_SUCCESS, payload: Array.isArray(data) ? data : data.orders ?? [] });
   } catch (err) {
     dispatch({ type: FETCH_MY_ORDERS_FAILURE, payload: err.message });
@@ -78,7 +78,7 @@ export const fetchMyOrders = () => async (dispatch) => {
 export const fetchOrder = (id) => async (dispatch) => {
   dispatch({ type: FETCH_ORDER_REQUEST });
   try {
-    const data = await apiFetch(ORDER_API, `/orders/${id}`);
+    const data = await apiFetch(API, `/orders/${id}`);
     dispatch({ type: FETCH_ORDER_SUCCESS, payload: data });
   } catch (err) {
     dispatch({ type: FETCH_ORDER_FAILURE, payload: err.message });
@@ -89,7 +89,7 @@ export const fetchOrder = (id) => async (dispatch) => {
 export const createOrder = (payload) => async (dispatch) => {
   dispatch({ type: CREATE_ORDER_REQUEST });
   try {
-    const order = await apiFetch(ORDER_API, '/orders/', {
+    const order = await apiFetch(API, '/orders/', {
       method: 'POST',
       body: JSON.stringify({
         address: payload.address,
@@ -111,7 +111,7 @@ export const createOrder = (payload) => async (dispatch) => {
 export const updateOrder = (id, updates) => async (dispatch) => {
   dispatch({ type: UPDATE_ORDER_REQUEST });
   try {
-    const data = await apiFetch(ORDER_API, `/orders/${id}`, {
+    const data = await apiFetch(API, `/orders/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(updates),
     });
@@ -127,7 +127,7 @@ export const updateOrder = (id, updates) => async (dispatch) => {
 export const deleteOrder = (id) => async (dispatch) => {
   dispatch({ type: DELETE_ORDER_REQUEST });
   try {
-    await apiFetch(ORDER_API, `/orders/${id}`, { method: 'DELETE' });
+    await apiFetch(API, `/orders/${id}`, { method: 'DELETE' });
     dispatch({ type: DELETE_ORDER_SUCCESS, payload: id });
     return true;
   } catch (err) {
@@ -140,7 +140,7 @@ export const deleteOrder = (id) => async (dispatch) => {
 export const payOrder = (orderId, amount = 0) => async (dispatch) => {
   dispatch({ type: PAY_ORDER_REQUEST });
   try {
-    await apiFetch(ORDER_API, '/payments/', {
+    await apiFetch(API, '/payments/', {
       method: 'POST',
       body: JSON.stringify({
         order_id: orderId,
@@ -160,7 +160,7 @@ export const payOrder = (orderId, amount = 0) => async (dispatch) => {
 // GET /order-items/order/{order_id}
 export const fetchOrderItems = (orderId) => async (dispatch, getState) => {
   try {
-    const data = await apiFetch(ORDER_API, `/order-items/order/${orderId}`);
+    const data = await apiFetch(API, `/order-items/order/${orderId}`);
     const raw = Array.isArray(data) ? data : (data?.order_items ?? []);
     const products = getState().products?.items ?? [];
     const items = raw.map((i) => {
@@ -184,7 +184,7 @@ export const ORDER_ITEMS_LOADED = 'orders/ITEMS_LOADED';
 export const patchOrderStatus = (id, status) => async (dispatch) => {
   dispatch({ type: UPDATE_ORDER_REQUEST });
   try {
-    const data = await apiFetch(ORDER_API, `/orders/${id}/status`, {
+    const data = await apiFetch(API, `/orders/${id}/status`, {
       method: 'PATCH',
       body: JSON.stringify({ status }),
     });
@@ -200,7 +200,7 @@ export const patchOrderStatus = (id, status) => async (dispatch) => {
 export const fetchStatistics = () => async (dispatch) => {
   dispatch({ type: FETCH_STATISTICS_REQUEST });
   try {
-    const data = await apiFetch(ORDER_API, '/orders/statistics');
+    const data = await apiFetch(API, '/orders/statistics');
     dispatch({ type: FETCH_STATISTICS_SUCCESS, payload: data });
   } catch (err) {
     dispatch({ type: FETCH_STATISTICS_FAILURE, payload: err.message });

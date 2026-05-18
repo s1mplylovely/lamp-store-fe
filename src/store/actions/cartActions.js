@@ -1,4 +1,4 @@
-import { apiFetch, ORDER_API } from '../api';
+import { apiFetch, API } from '../api';
 
 export const FETCH_CART_REQUEST = 'cart/FETCH_REQUEST';
 export const FETCH_CART_SUCCESS = 'cart/FETCH_SUCCESS';
@@ -36,7 +36,7 @@ function mapCartItem(apiItem, products = []) {
 export const fetchCart = (products = []) => async (dispatch) => {
   dispatch({ type: FETCH_CART_REQUEST });
   try {
-    const data = await apiFetch(ORDER_API, '/cart/');
+    const data = await apiFetch(API, '/cart/');
     const items = (data?.cart_items ?? []).map((i) => mapCartItem(i, products));
     dispatch({ type: FETCH_CART_SUCCESS, payload: items });
   } catch (err) {
@@ -48,7 +48,7 @@ export const fetchCart = (products = []) => async (dispatch) => {
 export const addToCart = (product) => async (dispatch) => {
   dispatch({ type: ADD_TO_CART_REQUEST });
   try {
-    const data = await apiFetch(ORDER_API, '/cart/', {
+    const data = await apiFetch(API, '/cart/', {
       method: 'POST',
       body: JSON.stringify({ product_id: product.id, quantity: 1 }),
     });
@@ -80,7 +80,7 @@ export const updateCartQty = (productId, qty) => async (dispatch, getState) => {
       return dispatch(removeFromCart(productId));
     }
 
-    await apiFetch(ORDER_API, `/cart/${cartItem.cartItemId}`, {
+    await apiFetch(API, `/cart/${cartItem.cartItemId}`, {
       method: 'PATCH',
       body: JSON.stringify({ quantity: qty }),
     });
@@ -97,7 +97,7 @@ export const removeFromCart = (productId) => async (dispatch, getState) => {
     const cartItem = getState().cart.items.find((i) => i.productId === productId);
     if (!cartItem) throw new Error('Cart item not found in state');
 
-    await apiFetch(ORDER_API, `/cart/${cartItem.cartItemId}`, {
+    await apiFetch(API, `/cart/${cartItem.cartItemId}`, {
       method: 'DELETE',
     });
     dispatch({ type: REMOVE_FROM_CART_SUCCESS, payload: productId });
@@ -110,7 +110,7 @@ export const removeFromCart = (productId) => async (dispatch, getState) => {
 export const clearCart = () => async (dispatch) => {
   dispatch({ type: CLEAR_CART_REQUEST });
   try {
-    await apiFetch(ORDER_API, '/cart/clear', { method: 'DELETE' });
+    await apiFetch(API, '/cart/clear', { method: 'DELETE' });
     dispatch({ type: CLEAR_CART_SUCCESS });
   } catch (err) {
     dispatch({ type: CLEAR_CART_FAILURE, payload: err.message });

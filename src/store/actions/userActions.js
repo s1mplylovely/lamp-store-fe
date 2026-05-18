@@ -1,4 +1,4 @@
-import { apiFetch, USER_API } from '../api';
+import { apiFetch, API } from '../api';
 
 export const FETCH_USERS_REQUEST = 'users/FETCH_ALL_REQUEST';
 export const FETCH_USERS_SUCCESS = 'users/FETCH_ALL_SUCCESS';
@@ -38,7 +38,7 @@ export const fetchUsers = (filters = {}) => async (dispatch) => {
       skip: filters.skip,
       limit: filters.limit,
     });
-    const data = await apiFetch(USER_API, `/users/${query}`);
+    const data = await apiFetch(API, `/users/${query}`);
     dispatch({ type: FETCH_USERS_SUCCESS, payload: data });
   } catch (err) {
     dispatch({ type: FETCH_USERS_FAILURE, payload: err.message });
@@ -49,7 +49,7 @@ export const fetchUsers = (filters = {}) => async (dispatch) => {
 export const fetchUser = (id) => async (dispatch) => {
   dispatch({ type: FETCH_USER_REQUEST });
   try {
-    const data = await apiFetch(USER_API, `/users/${id}`);
+    const data = await apiFetch(API, `/users/${id}`);
     dispatch({ type: FETCH_USER_SUCCESS, payload: data });
     return data;
   } catch (err) {
@@ -62,7 +62,7 @@ export const fetchUser = (id) => async (dispatch) => {
 export const createUser = (form) => async (dispatch) => {
   dispatch({ type: CREATE_USER_REQUEST });
   try {
-    const data = await apiFetch(USER_API, '/users/', {
+    const data = await apiFetch(API, '/users/', {
       method: 'POST',
       body: JSON.stringify({
         name: form.name || null,
@@ -91,7 +91,7 @@ export const updateUser = (id, form) => async (dispatch) => {
     if (form.isAdmin !== undefined) body.role = form.isAdmin ? 'admin' : 'client';
     if (form.isBlocked !== undefined) body.is_blocked = form.isBlocked;
 
-    const data = await apiFetch(USER_API, `/users/${id}`, {
+    const data = await apiFetch(API, `/users/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(body),
     });
@@ -107,7 +107,7 @@ export const updateUser = (id, form) => async (dispatch) => {
 export const deleteUser = (id) => async (dispatch) => {
   dispatch({ type: DELETE_USER_REQUEST });
   try {
-    await apiFetch(USER_API, `/users/${id}`, { method: 'DELETE' });
+    await apiFetch(API, `/users/${id}`, { method: 'DELETE' });
     dispatch({ type: DELETE_USER_SUCCESS, payload: id });
     return true;
   } catch (err) {
